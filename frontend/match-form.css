@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #ffffff;
+  color: #333;
+}
+
+.tk-header {
+  background-color: #2ecc71; /* green */
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.tk-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f4faff;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.08);
+}
+
+.tk-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.tk-form label {
+  font-weight: 600;
+  margin-top: 1.2rem;
+  color: #2c3e50;
+}
+
+.tk-form input,
+.tk-form select {
+  padding: 0.6rem;
+  margin-top: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.tk-form input:focus,
+.tk-form select:focus {
+  border-color: #3498db;
+}
+
+.tk-form button {
+  background-color: #3498db;
+  color: white;
+  font-size: 1rem;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 6px;
+  margin-top: 2rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.tk-form button:hover {
+  background-color: #2980b9;
+}
+
+.tk-note {
+  font-size: 0.9rem;
+  color: #555;
+  background: #e6f7e9;
+  padding: 0.8rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  line-height: 1.5;
+}
+
+/* Responsive: phones / small tablets — used by personal.html, preferences.html, edit-profile.html */
+@media (max-width: 700px) {
+  .tk-header { font-size: 1.4rem; padding: 0.8rem; }
+  .tk-container {
+    margin: 0.8rem;
+    padding: 1.1rem 1rem 1.4rem;
+    border-radius: 10px;
+  }
+  .tk-form label { font-size: 0.95rem; margin-top: 0.9rem; }
+  .tk-form input,
+  .tk-form select { font-size: 0.95rem; padding: 0.55rem; }
+  .tk-form button { padding: 0.75rem; font-size: 0.95rem; }
+}
+
+@media (max-width: 420px) {
+  .tk-container {
+    margin: 0.5rem;
+    padding: 0.9rem 0.8rem 1.2rem;
+  }
+}

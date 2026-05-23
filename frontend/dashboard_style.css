@@ -1,0 +1,559 @@
+/* General reset & font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+/* Layout container */
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: -220px;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar-visible {
+  left: 0;
+}
+
+.sidebar-top {
+  padding: 25px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-section {
+  text-align: center;
+}
+
+.profile-icon {
+  margin-bottom: 10px;
+}
+
+.profile-icon img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  object-fit: cover;
+}
+
+.profile-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  margin-top: 8px;
+}
+
+.nav-links {
+  flex: 1;
+  padding: 20px 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  padding: 15px 20px;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-left-color: rgba(255, 255, 255, 0.5);
+}
+
+.nav-item.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-left-color: white;
+}
+
+.nav-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sidebar-bottom {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.contact-info {
+  text-align: center;
+}
+
+.support-email {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 10px 0;
+  word-break: break-all;
+}
+
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 10px;
+  margin-left: 0; /* No sidebar by default */
+  transition: margin-left 0.3s ease;
+}
+.sidebar-visible ~ .main-content {
+  margin-left: 220px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 8px 15px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+.menu-icon {
+  font-size: 20px;
+  cursor: pointer;
+}
+.site-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+}
+.header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.header-actions a {
+  text-decoration: none;
+  font-size: 14px;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: #eee;
+}
+.header-actions a:hover {
+  background-color: #ddd;
+}
+.settings-icon {
+  cursor: pointer;
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.filters button {
+  padding: 6px 10px;
+  border: none;
+  background-color: #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.filters button.active {
+  background-color: #4aa3ff;
+  color: white;
+}
+
+/* Profile Cards - Mobile First */
+.profiles-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Two columns for larger mobile screens and tablets */
+@media screen and (min-width: 480px) {
+  .profiles-list {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+}
+
+/* Desktop: Two columns with better spacing */
+@media screen and (min-width: 768px) {
+  .profiles-list {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px;
+  }
+}
+
+/* Large screens: maintain two columns with more spacing */
+@media screen and (min-width: 1200px) {
+  .profiles-list {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px;
+  }
+}
+.profile-card {
+  background-color: white;
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.profile-pic {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.profile-details h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+.profile-details p {
+  font-size: 13px;
+  color: #666;
+  margin: 2px 0;
+}
+.profile-details .match-count-label {
+  color: #00b894;
+  font-weight: 700;
+}
+.score {
+  margin-left: auto;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  min-width: 40px;
+  text-align: center;
+}
+
+.score[data-score="N/A"] {
+  background-color: #6c757d;
+  color: white;
+}
+
+.score:not([data-score="N/A"]) {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #007bff 100%);
+  color: white;
+}
+
+/* Video block */
+.profile-video video {
+  width: 100%;
+  border-radius: 6px;
+  background-color: #000;
+  max-height: 220px;
+}
+.profile-video p {
+  text-align: center;
+  padding: 12px;
+  color: #777;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+}
+
+/* Actions */
+.profile-actions {
+  display: flex;
+  gap: 8px;
+}
+.select-btn {
+  flex: 1;
+  background-color: #4aa3ff;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.remove-btn {
+  flex: 1;
+  background-color: #9e9e9e;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.select-btn:hover {
+  background-color: #3889d6;
+}
+.remove-btn:hover {
+  background-color: #757575;
+}
+
+.disabled-btn {
+  background-color: #ccc !important;
+  color: #666 !important;
+  cursor: not-allowed !important;
+}
+
+.matched-btn {
+  background-color: #28a745 !important;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.restore-btn {
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  width: 100%;
+}
+
+.restore-btn:hover {
+  background-color: #138496;
+}
+
+.match-btn {
+  flex: 1;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  animation: pulse 2s infinite;
+}
+
+.match-btn:hover {
+  background-color: #218838;
+}
+
+.match-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  animation: none;
+}
+
+.select-btn:disabled,
+.remove-btn:disabled {
+  background-color: #6c757d !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+.filters button[data-section="matched"].active {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 25vw;
+    left: -25vw;
+  }
+
+  .sidebar-visible {
+    left: 0;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+/* Force one column on phones – overrides the !important desktop rules above */
+@media (max-width: 600px) {
+  .profiles-list {
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+  }
+  .filters {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .filters button {
+    flex: 1 1 auto;
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+}
+.filters button[data-section="removed"].active {
+  background-color: #9e9e9e;
+  color: white;
+}
+/* Floating Profile Photo */
+.floating-profile-photo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+}
+
+.no-matches-message {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.no-matches-message h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.no-matches-message p {
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.adjust-preferences-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.adjust-preferences-btn:hover {
+  background: #0056b3;
+}
+
+.disabled-btn {
+  background: #6c757d !important;
+  color: white !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+.disabled-btn:hover {
+  background: #6c757d !important;
+}
+/* Image inside the floating photo */
+.floating-profile-photo img {
+  width: 250px;  /* Updated size */
+  height: 250px; /* Updated size */
+  border-radius: 50%;
+  margin-bottom: 20px;
+  object-fit: cover;
+}
+
+/* Close button */
+.floating-profile-photo .close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #757575;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+/* Floating profile photo button */
+.floating-profile-photo button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+}
+
+/* Disable background content interaction */
+.floating-profile-photo-active {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Optional: To make the "X" button circular */
+.floating-profile-photo .close-btn {
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+/* Body content when photo is shown */
+body.floating-active {
+  overflow: hidden; /* Prevent scroll */
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  color: #666;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007BFF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

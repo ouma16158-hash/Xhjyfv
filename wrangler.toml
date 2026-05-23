@@ -1,0 +1,39 @@
+name = "onraiser"
+main = "backend/server.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# ── Static assets served directly by Cloudflare before the Worker ──
+[assets]
+directory = "./frontend"
+binding = "ASSETS"
+
+[triggers]
+crons = ["0 * * * *"]
+
+# ── All vars below are available as process.env.X inside the Worker ──
+# For production deployment, sensitive values should be overridden via:
+#   npx wrangler secret put <KEY>
+[vars]
+NODE_ENV = "production"
+SUPABASE_URL = "https://pectaxzkoubqlfttxtgd.supabase.co"
+ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlY3RheHprb3VicWxmdHR4dGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyNzYyMTEsImV4cCI6MjA3Mzg1MjIxMX0.29blq1du-TqraZHsp_6y3wN-GDa73zg10I342-Nwb1Q"
+JWT_SECRET = "?v{A[dBoQU%/3PMF8QVrle|D9}eRS="
+SENDGRID_API_KEY = "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"
+EMAIL_USER = "cleanisaac48@gmail.com"
+GMAIL_USER = "takeyours001@gmail.com"
+EMAIL_PASS = "ydyb dxgr psed vcsg"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = "587"
+EMAIL_SECURE = "false"
+CLOUDINARY_CLOUD_NAME = "dhulblksa"
+CLOUDINARY_API_KEY = "654342753168168"
+CLOUDINARY_API_SECRET = "OkQhY0S8yoSQi02TAJVMlLS7W8Q"
+KEY_ID = "beb4ee10df456a8aaafa26fa1a6c36b6"
+SECRET_KEY = "610b4d0b52bf4368d106a7b2095013767ed4661c43b0b4e4c0a0efa6b82baf3f"
+CLOUDFLARE_ACCOUNT_ID = "22e974c7bbc8fcbf901d94efe5228741"
+CLOUDFLARE_BUCKET_NAME = "niche"
+CLOUDFLARE_PUBLIC_URL = "https://pub-e34aa242b0e5444b84454284a641da63.r2.dev"
+PAYPAL_CLIENT_ID = "AdbRZZ1svn4cRm6oZ3gZnv3YbU0J4rvmv00dvNT2r8cW1UCto12LJCULG7lKl-yRBDwbfhjDkkFT0RHF"
+PAYPAL_SECRET = "EAAlQJIEVEFDaZ5XVH8c4HxX0K3Kw6eMo6YVTlFcn29mE0sOzaLipXDmpk04A4gakiaW8wDubrFKiGDv"
+FRONTEND_URL = "https://takeyours.replit.app"

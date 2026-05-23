@@ -1,0 +1,222 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Takeyours – Match Preferences</title>
+  <link rel="stylesheet" href="match-form.css" />
+  <style>
+    .tk-spinner {
+      display: none;
+      width: 40px;
+      height: 40px;
+      margin: 20px auto;
+      border: 4px solid #c8e6c9;
+      border-top-color: #2e7d32;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <header class="tk-header">Takeyours</header>
+
+  <main class="tk-container">
+    <form id="preferencesForm" class="tk-form">
+      <h2>Your Match Preferences</h2>
+
+      <label>Preferred Gender</label>
+      <select name="pref_gender" required>
+        <option value="">Select</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Non-Binary</option>
+        <option>Any</option>
+      </select>
+
+      <label>Preferred Age Range</label>
+      <div style="display: flex; gap: 10px;">
+        <input type="number" name="pref_age_min" placeholder="Min" required min="18" max="80" />
+        <input type="number" name="pref_age_max" placeholder="Max" required min="18" max="80" />
+      </div>
+
+      <label>Country of Birth</label>
+      <input type="text" name="pref_country_of_birth" required />
+
+      <label>Country of Residence</label>
+      <input type="text" name="pref_country_of_residence" required />
+
+      <label>County of Residence</label>
+      <input type="text" name="pref_county_of_residence" required />
+
+      <label>Preferred Country</label>
+      <input type="text" name="pref_country" required />
+
+      <label>Preferred Languages</label>
+      <select name="pref_languages" multiple required>
+        <option>English</option>
+        <option>Swahili</option>
+        <option>French</option>
+        <option>Arabic</option>
+        <option>Spanish</option>
+        <option>Any</option>
+      </select>
+
+      <label>Preferred Religion</label>
+      <select name="pref_religion" required>
+        <option>Christian</option>
+        <option>Muslim</option>
+        <option>Hindu</option>
+        <option>Jewish</option>
+        <option>Atheist</option>
+        <option>Agnostic</option>
+        <option>Other</option>
+        <option>Any</option>
+      </select>
+
+      <label>Importance of Matching Religion</label>
+      <select name="pref_religion_importance" required>
+        <option>Not important</option>
+        <option>Somewhat important</option>
+        <option>Very important</option>
+        <option>Mandatory</option>
+      </select>
+
+      <label>Preferred Height (cm)</label>
+      <input type="number" name="pref_height" min="120" max="220" required />
+
+      <label>Preferred Weight (kg)</label>
+      <input type="number" name="pref_weight" min="30" max="200" required />
+
+      <label>Preferred Body Type</label>
+      <select name="pref_body_type" required>
+        <option>Fit</option>
+        <option>Slim</option>
+        <option>Curvy</option>
+        <option>Athletic</option>
+        <option>Plus-size</option>
+        <option>Any</option>
+      </select>
+
+      <label>Preferred Skin Color</label>
+      <select name="pref_skin_color" required>
+        <option>Very Light</option>
+        <option>Light</option>
+        <option>Fair</option>
+        <option>Olive</option>
+        <option>Brown</option>
+        <option>Dark Brown</option>
+        <option>Chocolate</option>
+        <option>Deep Black</option>
+        <option>Albino</option>
+        <option>Any</option>
+      </select>
+
+      <label>Preferred Ethnicity</label>
+      <select name="pref_ethnicity" required>
+        <option>African</option>
+        <option>Asian</option>
+        <option>Caucasian</option>
+        <option>Latino</option>
+        <option>Mixed</option>
+        <option>Other</option>
+        <option>Any</option>
+      </select>
+
+      <label>Preferred Diet</label>
+      <select name="pref_diet" required>
+        <option>Omnivore</option>
+        <option>Vegetarian</option>
+        <option>Vegan</option>
+        <option>Pescatarian</option>
+        <option>Halal</option>
+        <option>Kosher</option>
+        <option>Other</option>
+        <option>Any</option>
+      </select>
+
+      <label>Preferred Smoking</label>
+      <select name="pref_smoking" required>
+        <option>No</option>
+        <option>Occasionally</option>
+        <option>Yes</option>
+        <option>Any</option>
+      </select>
+
+      <label>Preferred Drinking</label>
+      <select name="pref_drinking" required>
+        <option>No</option>
+        <option>Occasionally</option>
+        <option>Socially</option>
+        <option>Regularly</option>
+        <option>Any</option>
+      </select>
+
+      <label>Preferred Exercise</label>
+      <select name="pref_exercise" required>
+        <option>Never</option>
+        <option>Sometimes</option>
+        <option>Regularly</option>
+        <option>Daily</option>
+        <option>Any</option>
+      </select>
+
+      <label>Preferred Pets</label>
+      <select name="pref_pets" required>
+        <option>None</option>
+        <option>Dog</option>
+        <option>Cat</option>
+        <option>Bird</option>
+        <option>Other</option>
+        <option>Any</option>
+      </select>
+
+      <label>Do You Want Kids?</label>
+      <select name="pref_children" required>
+        <option>Yes</option>
+        <option>No</option>
+        <option>Maybe</option>
+        <option>Any</option>
+      </select>
+
+      <label>Preferred Living Situation</label>
+      <select name="pref_living_situation" required>
+        <option>Alone</option>
+        <option>With Parents</option>
+        <option>With Roommates</option>
+        <option>With Children</option>
+        <option>Other</option>
+        <option>Any</option>
+      </select>
+
+      <label>Should They Be Willing to Relocate?</label>
+      <select name="pref_willing_to_relocate" required>
+        <option>Yes</option>
+        <option>No</option>
+        <option>Maybe</option>
+        <option>Any</option>
+      </select>
+
+      <label>Preferred Relationship Type</label>
+      <select name="pref_relationship_type" required>
+        <option>Marriage</option>
+        <option>Long-term</option>
+        <option>Short-term</option>
+        <option>Friendship</option>
+        <option>Any</option>
+      </select>
+
+      <div class="tk-spinner" id="spinner"></div>
+      <button type="submit">Finish Registration</button>
+    </form>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="preferences.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onraiser | Confirm OTP</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .ty-message {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: green;
+      text-align: center;
+    }
+    .ty-success {
+      color: green;
+    }
+    .ty-center {
+      text-align: center;
+      margin-top: 1.2rem;
+    }
+    #resendBtn {
+      background-color: #00b894;
+      color: #fff;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    #resendBtn:hover {
+      background-color: #01956f;
+    }
+  </style>
+</head>
+<body>
+  <div class="ty-register-box">
+    <div class="ty-logo-form">Onraiser</div>
+
+    <form class="ty-form" id="otpForm">
+      <label>Enter OTP sent to your email</label>
+      <input type="text" id="otp" required />
+
+      <div class="ty-message" id="otpMsg"></div>
+      <div class="ty-loading" id="otpLoading" style="display: none;">Verifying...</div>
+
+      <button type="submit" class="ty-submit-btn">Verify OTP</button>
+    </form>
+
+    <div class="ty-center">
+      <p>Didn't get the code?</p>
+      <button id="resendBtn" type="button">Resend OTP</button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    // Force cache refresh
+    console.log('🔄 Page loaded at:', new Date().toISOString());
+  </script>
+  <script>
+    // --- Submit OTP verification ---
+    document.getElementById("otpForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const otp = document.getElementById("otp").value.trim();
+      const msg = document.getElementById("otpMsg");
+      const loader = document.getElementById("otpLoading");
+      const email = sessionStorage.getItem("resetEmail");
+
+      if (!email) {
+        msg.innerText = "Session expired. Start again.";
+        return;
+      }
+
+      msg.innerText = "";
+      loader.style.display = "block";
+
+      try {
+        const res = await fetch(`${config.API_BASE_URL}/api/verify-reset-otp`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, otp })
+        });
+
+        const data = await res.json();
+        loader.style.display = "none";
+
+        if (res.ok) {
+          msg.innerText = "✅ OTP verified!";
+          setTimeout(() => {
+            window.location.href = `reset-password.html?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`;
+          }, 1500);
+        } else {
+          msg.innerText = data.error;
+        }
+      } catch (err) {
+        loader.style.display = "none";
+        msg.innerText = "Network error.";
+      }
+    });
+
+    // --- Resend OTP using forgot-password route ---
+    document.getElementById("resendBtn").addEventListener("click", async () => {
+      const msg = document.getElementById("otpMsg");
+      const email = sessionStorage.getItem("resetEmail");
+
+      if (!email) {
+        msg.innerText = "Session expired. Please go back and try again.";
+        return;
+      }
+
+      msg.innerText = "Resending OTP...";
+
+      try {
+        const res = await fetch(`${config.API_BASE_URL}/api/forgot-password`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          msg.innerText = "OTP sent.";
+        } else {
+          msg.innerText = data.error || "Could not resend OTP.";
+        }
+      } catch (err) {
+        msg.innerText = "Network error. Try again.";
+      }
+    });
+  </script>
+</body>
+</html>

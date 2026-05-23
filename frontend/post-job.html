@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Onraiser – Post a Job</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f4f7fb; min-height: 100vh; }
+
+    .page-header {
+      background: linear-gradient(135deg, #007bff 0%, #00b894 100%);
+      color: white;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .page-header a {
+      color: white;
+      text-decoration: none;
+      font-size: 22px;
+      line-height: 1;
+    }
+    .page-header h1 { font-size: 20px; font-weight: 700; }
+
+    .form-wrapper {
+      max-width: 680px;
+      margin: 30px auto;
+      padding: 0 16px 40px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 28px 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #007bff;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e8f4ff;
+    }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 6px;
+    }
+    .form-group label span { color: #dc3545; margin-left: 2px; }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #d0dce8;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #333;
+      background: #fafcff;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #007bff;
+      background: #fff;
+    }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+
+    .salary-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .upload-area {
+      border: 2px dashed #007bff;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s;
+      background: #f0f7ff;
+    }
+    .upload-area:hover { background: #e0f0ff; }
+    .upload-area input { display: none; }
+    .upload-area p { color: #007bff; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .upload-area small { color: #888; font-size: 12px; }
+    .upload-status { margin-top: 8px; font-size: 13px; color: #00b894; font-weight: 600; }
+
+    .progress-wrap { height: 4px; background: #e0e0e0; border-radius: 4px; margin-top: 8px; display: none; }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, #007bff, #00b894); border-radius: 4px; width: 0; transition: width 0.3s; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #007bff 0%, #00b894 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.2s;
+    }
+    .submit-btn:hover { opacity: 0.92; }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .spinner {
+      display: none;
+      width: 28px; height: 28px;
+      border: 3px solid #cce5ff;
+      border-top-color: #007bff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 12px auto 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .alert { padding: 12px 16px; border-radius: 6px; font-size: 14px; margin-bottom: 16px; }
+    .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+    .strict-slider:before {
+      position: absolute; content: "";
+      height: 18px; width: 18px;
+      left: 4px; bottom: 4px;
+      background: white; border-radius: 50%;
+      transition: .3s;
+    }
+    input:checked + .strict-slider { background: #007bff !important; }
+    input:checked + .strict-slider:before { transform: translateX(24px); }
+
+    @media (max-width: 600px) {
+      .form-wrapper { margin: 14px auto; padding: 0 10px 24px; }
+      .card { padding: 18px 14px; }
+      .salary-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <a href="dashboard_page.html">&#8592;</a>
+    <h1>Post a Job</h1>
+  </div>
+
+  <div class="form-wrapper">
+    <div class="card">
+      <h2>Job Details</h2>
+      <div id="alertBox"></div>
+
+      <form id="postJobForm">
+        <div class="form-group">
+          <label>Job Position / Title <span>*</span></label>
+          <input type="text" name="position" placeholder="e.g. Software Engineer, Finance Manager" required />
+        </div>
+
+        <div class="form-group">
+          <label>Experience Required <span>*</span></label>
+          <select name="experience_required" required>
+            <option value="">Select experience level</option>
+            <option>Entry Level (0–1 years)</option>
+            <option>Junior (1–3 years)</option>
+            <option>Mid-Level (3–5 years)</option>
+            <option>Senior (5–8 years)</option>
+            <option>Expert (8+ years)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="background:#f9fbff;border:1px solid #e0ecff;border-radius:8px;padding:12px;">
+          <label style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <span>
+              Experience Filter Mode
+              <small style="display:block;font-weight:400;color:#666;font-size:12px;margin-top:4px;">
+                <strong>Strict</strong>: hide applicants outside the experience range above.<br>
+                <strong>Open</strong>: show every applicant regardless of experience.
+              </small>
+            </span>
+            <span style="display:inline-flex;align-items:center;gap:8px;">
+              <span id="strictLabel" style="font-size:13px;font-weight:600;color:#666;">Open</span>
+              <label class="strict-switch" style="position:relative;display:inline-block;width:50px;height:26px;">
+                <input type="checkbox" id="experienceStrict" name="experience_strict" style="opacity:0;width:0;height:0;">
+                <span class="strict-slider" style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ccc;border-radius:26px;transition:.3s;"></span>
+              </label>
+            </span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>Application Deadline <span>*</span></label>
+          <input type="date" name="deadline" id="deadlineInput" required />
+          <small style="color:#666;font-size:12px;display:block;margin-top:4px;">Posts are auto-deleted 3 days after this date.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Job Field / Industry <span>*</span></label>
+          <select name="job_field" id="jobFieldSelect" required>
+            <option value="">Select job field</option>
+            <option value="Engineering & Tech">Engineering & Tech</option>
+            <option value="Business & Admin">Business & Admin</option>
+            <option value="Health & Sciences">Health & Sciences</option>
+            <option value="Arts & Design">Arts & Design</option>
+            <option value="Humanities/Social">Humanities/Social</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Sub Field</label>
+          <select name="job_sub_field" id="jobSubFieldSelect">
+            <option value="">Select sub field (optional)</option>
+            <optgroup label="Engineering & Tech">
+              <option value="Civil & Structural">Civil &amp; Structural</option>
+              <option value="Software & Data">Software &amp; Data</option>
+              <option value="Electrical">Electrical</option>
+              <option value="Mechanical">Mechanical</option>
+            </optgroup>
+            <optgroup label="Business & Admin">
+              <option value="Finance & Accounting">Finance &amp; Accounting</option>
+              <option value="Marketing">Marketing</option>
+              <option value="HR">HR</option>
+              <option value="Operations">Operations</option>
+            </optgroup>
+            <optgroup label="Health & Sciences">
+              <option value="Clinical">Clinical</option>
+              <option value="Laboratory">Laboratory</option>
+              <option value="Public Health">Public Health</option>
+              <option value="Admin">Admin</option>
+            </optgroup>
+            <optgroup label="Arts & Design">
+              <option value="Graphic Design">Graphic Design</option>
+              <option value="UI/UX">UI/UX</option>
+              <option value="Photography">Photography</option>
+              <option value="Fine Arts">Fine Arts</option>
+            </optgroup>
+            <optgroup label="Humanities/Social">
+              <option value="Education">Education</option>
+              <option value="Psychology">Psychology</option>
+              <option value="Sociology">Sociology</option>
+              <option value="Political Science">Political Science</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Work Mode <span>*</span></label>
+          <select name="work_mode" required>
+            <option value="">Select work mode</option>
+            <option>Remote</option>
+            <option>Hybrid</option>
+            <option>On-site</option>
+          </select>
+        </div>
+
+        <div class="form-group salary-row">
+          <div>
+            <label>Minimum Salary (monthly)</label>
+            <input type="number" name="salary_min" min="0" placeholder="e.g. 50000" />
+          </div>
+          <div>
+            <label>Maximum Salary (monthly)</label>
+            <input type="number" name="salary_max" min="0" placeholder="e.g. 150000" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>About the Company</label>
+          <textarea name="about_company" placeholder="Brief description of your company, culture, and mission..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Job Functions / Responsibilities <span>*</span></label>
+          <textarea name="job_functions" rows="5" placeholder="• Develop and maintain software systems&#10;• Collaborate with cross-functional teams&#10;• ..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Skills Required <span>*</span></label>
+          <textarea name="skills_required" placeholder="e.g. JavaScript, React, Node.js, communication skills..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Attachment (JD / Company Profile – optional)</label>
+          <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+            <input type="file" id="fileInput" accept=".pdf,.doc,.docx,image/*" />
+            <p>&#128206; Click to upload a file</p>
+            <small>PDF, Word, or image — max 10MB</small>
+            <div class="upload-status" id="uploadStatus"></div>
+            <div class="progress-wrap" id="progressWrap">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+          </div>
+          <input type="hidden" id="attachmentUrl" name="attachment_url" />
+        </div>
+
+        <div class="spinner" id="spinner"></div>
+        <button type="submit" class="submit-btn" id="submitBtn">Post Job</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="auth-guard.js"></script>
+  <script src="post-job.js"></script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Onraiser – Preferences</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f4f7fb; min-height: 100vh; }
+
+    .tk-header {
+      background: linear-gradient(135deg, #007bff 0%, #00b894 100%);
+      color: white;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .tk-header a {
+      color: white;
+      text-decoration: none;
+      font-size: 22px;
+      line-height: 1;
+    }
+    .tk-header h1 { font-size: 20px; font-weight: 700; }
+
+    .tk-container {
+      max-width: 680px;
+      margin: 28px auto;
+      padding: 0 16px 40px;
+    }
+
+    .tk-form {
+      background: white;
+      border-radius: 10px;
+      padding: 28px 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .tk-form h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #007bff;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e8f4ff;
+    }
+
+    .form-group { margin-bottom: 18px; }
+    .tk-form label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 6px;
+      margin-top: 14px;
+    }
+    .tk-toggle-row label { flex: 1; margin: 0; font-size: 14px; }
+    .checkbox-chip label { margin: 0; font-size: 0.9rem; }
+
+    .tk-form input[type="text"],
+    .tk-form input[type="number"],
+    .tk-form select,
+    .tk-form textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #d0dce8;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #333;
+      background: #fafcff;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .tk-form input:focus,
+    .tk-form select:focus,
+    .tk-form textarea:focus { border-color: #007bff; background: #fff; }
+    .tk-form textarea { resize: vertical; min-height: 80px; }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #007bff;
+      margin: 24px 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e8f4ff;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .tk-note {
+      background: #e8f4ff;
+      border-left: 3px solid #007bff;
+      color: #1a4f8a;
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 13px;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    /* Checkbox chips */
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .checkbox-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border: 2px solid #d0dce8;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      background: #fafcff;
+    }
+    .checkbox-chip input { display: none; }
+    .checkbox-chip.checked {
+      border-color: #007bff;
+      background: #e8f4ff;
+      color: #007bff;
+      font-weight: 600;
+    }
+
+    /* Recency buttons */
+    .recency-btn {
+      padding: 9px 18px;
+      border: 2px solid #d0dce8;
+      border-radius: 20px;
+      cursor: pointer;
+      background: #fafcff;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .recency-btn.active {
+      border-color: #007bff;
+      background: #007bff;
+      color: white;
+      font-weight: 600;
+    }
+
+    /* Toggle switch */
+    .tk-toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .tk-toggle-row label { flex: 1; margin: 0; }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      border-radius: 26px;
+      transition: .3s;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px; width: 18px;
+      left: 4px; bottom: 4px;
+      background-color: white;
+      border-radius: 50%;
+      transition: .3s;
+    }
+    input:checked + .toggle-slider { background-color: #007bff; }
+    input:checked + .toggle-slider:before { transform: translateX(24px); }
+
+    /* Submit button */
+    #submitBtn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #007bff 0%, #00b894 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: opacity 0.2s;
+    }
+    #submitBtn:hover { opacity: 0.92; }
+    #submitBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Upload area */
+    .upload-area {
+      border: 2px dashed #007bff;
+      border-radius: 8px;
+      padding: 18px;
+      text-align: center;
+      cursor: pointer;
+      background: #f0f7ff;
+      transition: background 0.2s;
+    }
+    .upload-area:hover { background: #e0f0ff; }
+    .upload-area input { display: none; }
+    .upload-area p { color: #007bff; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .upload-area small { color: #888; font-size: 12px; }
+
+    .tk-spinner {
+      display: none;
+      width: 28px;
+      height: 28px;
+      border: 3px solid #cce5ff;
+      border-top-color: #007bff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 16px auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 600px) {
+      .tk-container { margin: 14px auto; padding: 0 10px 24px; }
+      .tk-form { padding: 18px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="spinnerOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+    <div class="tk-spinner" style="display:block;"></div>
+  </div>
+
+  <header class="tk-header">
+    <a href="personal.html">&#8592;</a>
+    <h1 id="prefHeaderTitle">Your Preferences</h1>
+  </header>
+
+  <main class="tk-container">
+    <form id="preferencesForm" class="tk-form">
+      <h2 id="prefTitle">Your Preferences</h2>
+
+      <!-- SEEKER PREFERENCES -->
+      <div id="seekerPrefs">
+        <div class="section-title">Industry Specialisation</div>
+
+        <label>Main Industry Specialisation</label>
+        <select name="target_industry" id="targetIndustrySelect">
+          <option value="">Any Main Industry</option>
+          <option value="Engineering & Tech">Engineering & Tech</option>
+          <option value="Business & Admin">Business & Admin</option>
+          <option value="Health & Sciences">Health & Sciences</option>
+          <option value="Arts & Design">Arts & Design</option>
+          <option value="Humanities/Social">Humanities/Social</option>
+        </select>
+
+        <label>Sub Main Industry Specialisation</label>
+        <select name="pref_country_of_residence" id="targetSubIndustrySelect">
+          <option value="">Any Sub Industry</option>
+        </select>
+
+        <div class="section-title">Salary & Location</div>
+        <label>Preferred Salary (monthly)</label>
+        <input type="number" name="pref_height" min="0" placeholder="e.g. 50000" />
+
+        <label>Preferred Location</label>
+        <input type="text" name="pref_location" placeholder="e.g. Nairobi, Kenya" />
+      </div>
+
+      <!-- EMPLOYER PREFERENCES -->
+      <div id="employerPrefs" style="display:none;">
+        <div class="section-title">Job Details</div>
+
+        <label>Job Position / Title <span style="color:#dc3545;">*</span></label>
+        <input type="text" name="position" placeholder="e.g. Software Engineer, Finance Manager" />
+
+        <label>Job Field / Industry <span style="color:#dc3545;">*</span></label>
+        <select name="job_field" id="empJobFieldSelect">
+          <option value="">Select job field</option>
+          <option value="Engineering & Tech">Engineering & Tech</option>
+          <option value="Business & Admin">Business & Admin</option>
+          <option value="Health & Sciences">Health & Sciences</option>
+          <option value="Arts & Design">Arts & Design</option>
+          <option value="Humanities/Social">Humanities/Social</option>
+        </select>
+
+        <label>Sub Field <span style="color:#dc3545;">*</span></label>
+        <select name="job_sub_field" id="empJobSubFieldSelect">
+          <option value="">Select sub field</option>
+        </select>
+
+        <label>Experience Required <span style="color:#dc3545;">*</span></label>
+        <select name="experience_required">
+          <option value="">Select experience level</option>
+          <option>Entry Level (0–1 years)</option>
+          <option>Junior (1–3 years)</option>
+          <option>Mid-Level (3–5 years)</option>
+          <option>Senior (5–8 years)</option>
+          <option>Expert (8+ years)</option>
+        </select>
+
+        <div class="tk-toggle-row" style="background:#f9fbff;border:1px solid #e0ecff;border-radius:8px;padding:10px 12px;">
+          <label style="margin:0;">
+            Experience Filter Mode
+            <small style="display:block;font-weight:400;color:#666;font-size:12px;margin-top:3px;">
+              <strong>Strict</strong>: hide applicants outside the range above. <strong>Open</strong>: show everyone.
+            </small>
+          </label>
+          <span id="empStrictLabel" style="font-size:13px;font-weight:600;color:#666;margin-right:6px;">Open</span>
+          <label class="toggle-switch">
+            <input type="checkbox" name="experience_strict" id="empExperienceStrict">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <label>Application Deadline <span style="color:#dc3545;">*</span></label>
+        <input type="date" name="deadline" id="empDeadlineInput" />
+        <small class="tk-note" style="display:block;color:#666;margin-bottom:14px;">Posts are auto-deleted 3 days after this date.</small>
+
+        <label>Work Mode <span style="color:#dc3545;">*</span></label>
+        <select name="work_mode">
+          <option value="">Select work mode</option>
+          <option>Remote</option>
+          <option>Hybrid</option>
+          <option>On-site</option>
+        </select>
+
+        <label>Minimum Salary (monthly)</label>
+        <input type="number" name="salary_min" min="0" placeholder="e.g. 50000" />
+
+        <label>Maximum Salary (monthly)</label>
+        <input type="number" name="salary_max" min="0" placeholder="e.g. 150000" />
+
+        <label>About the Company</label>
+        <textarea name="about_company" placeholder="Brief description of your company, culture, and mission..."></textarea>
+
+        <label>Job Functions / Responsibilities <span style="color:#dc3545;">*</span></label>
+        <textarea name="job_functions" rows="5" placeholder="• Develop and maintain software systems&#10;• Collaborate with cross-functional teams&#10;• ..." ></textarea>
+
+        <label>Skills Required <span style="color:#dc3545;">*</span></label>
+        <textarea name="skills_required" placeholder="e.g. JavaScript, React, Node.js, communication skills..."></textarea>
+
+        <label>Attachment (JD / Company Profile – optional)</label>
+        <input type="file" id="jobAttachmentInput" accept=".pdf,.doc,.docx,image/*" />
+        <p id="jobAttachmentStatus" class="tk-note"></p>
+        <input type="hidden" name="attachment_url" id="jobAttachmentUrl" />
+      </div>
+
+      <div class="tk-spinner" id="spinner"></div>
+      <button type="submit" id="submitBtn">Finish Setup</button>
+    </form>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="auth-guard.js"></script>
+  <script src="preferences.js"></script>
+</body>
+</html>

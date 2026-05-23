@@ -1,0 +1,245 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffffff;
+  color: #1d3557;
+}
+
+.ty-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  border-bottom: 2px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.ty-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1d3557;
+}
+
+.ty-nav a {
+  margin-left: 1rem;
+  text-decoration: none;
+  font-weight: bold;
+  color: #1d3557;
+}
+
+.ty-signup {
+  background-color: #00b894;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+.ty-hero {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+  background: #0d2137;
+}
+
+.ty-hero-text {
+  flex: 1 1 50%;
+  max-width: 600px;
+}
+
+.ty-hero-text h1,
+.ty-hero-text h2,
+.ty-hero-text h3 {
+  margin-bottom: 1rem;
+}
+
+.ty-cta-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #0984e3;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.ty-hero-img {
+  flex: 1 1 40%;
+  text-align: center;
+}
+
+.ty-hero-img img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ty-gallery {
+  padding: 3rem 2rem;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.ty-video-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.ty-video-grid video {
+  width: 300px;
+  height: 180px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.ty-view-more-btn {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.5rem 1.25rem;
+  background-color: #00b894;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.ty-about {
+  padding: 3rem 2rem;
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.ty-about p {
+  max-width: 800px;
+  margin: auto;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.ty-footer {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: #f1f1f1;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .ty-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .ty-hero-text, .ty-hero-img {
+    flex: 1 1 100%;
+  }
+
+  .ty-video-grid video {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .ty-header {
+    padding: 0.6rem 0.8rem;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .ty-logo {
+    font-size: 1.2rem;
+  }
+  .ty-nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+  .ty-nav a {
+    margin-left: 0;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+  .ty-signup {
+    padding: 0.35rem 0.6rem;
+  }
+  .ty-signin {
+    padding: 0.35rem 0.4rem;
+  }
+}
+.ty-register-box {
+  max-width: 400px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.ty-logo-form {
+  font-size: 1.7rem;
+  font-weight: bold;
+  color: #00b894;
+  margin-bottom: 1.5rem;
+}
+
+.ty-form label {
+  display: block;
+  text-align: left;
+  font-weight: 600;
+  margin-top: 1rem;
+  color: #1d3557;
+}
+
+.ty-form input {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.ty-password {
+  position: relative;
+}
+
+.ty-toggle {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.ty-submit-btn {
+  width: 100%;
+  margin-top: 1.8rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: #0984e3;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.ty-submit-btn:hover {
+  background-color: #087cd1;
+}

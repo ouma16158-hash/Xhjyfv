@@ -1,0 +1,204 @@
+
+/* Reset some styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Main body styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f7f7f7;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;  /* Align at the top */
+  height: 100vh;
+  position: relative;
+  padding-top: 100px;  /* To avoid overlap with the floating title */
+}
+
+/* Floating title in green */
+header {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: transparent;
+  color: #28a745; /* Green color */
+  font-size: 50px;  /* Larger size for the floating title */
+  font-weight: bold;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* Second title (User Profile) - Positioned below the floating title */
+h1 {
+  text-align: center;
+  color: #007BFF;
+  font-size: 28px;  /* Reduced font size for user profile */
+  margin-top: 70px; /* Adds a gap between the floating "Takeyours" title and "User Profile" title */
+}
+
+/* Container for profile content */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /* Adjusts gap below the user profile title */
+}
+
+/* Profile info layout */
+#profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 30px;  /* Gap between titles and profile content */
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+/* Profile photo and video layout */
+.profile-media {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.profile-media .photo,
+.profile-media .video {
+  flex: 1;
+  min-width: 280px;
+  max-width: 48%;
+  text-align: center;
+}
+
+.profile-media img {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-media video {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Details styling */
+.details {
+  text-align: center;
+}
+
+.details h2 {
+  color: #007BFF;
+}
+
+.details p {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.details p strong {
+  color: #4CAF50;
+}
+
+/* Full-screen media styles */
+.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.fullscreen img,
+.fullscreen video {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}
+
+/* Close button */
+.fullscreen-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.fullscreen-close:hover {
+  background-color: #0056b3;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .profile-media {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .profile-media .photo,
+  .profile-media .video {
+    max-width: 100%;
+  }
+
+  .profile-media img,
+  .profile-media video {
+    width: 100%;
+    height: auto;
+    max-height: 350px; /* Restrict size in mobile view */
+  }
+}
+
+@media (max-width: 480px) {
+  .details p {
+    font-size: 16px;
+  }
+
+  .profile-media img,
+  .profile-media video {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 250px; /* Even smaller on smaller devices */
+  }
+
+  header {
+    font-size: 40px;  /* Smaller floating title size on mobile */
+  }
+
+  .profile-media img {
+    max-height: 220px; /* Reduce photo size further in mobile */
+  }
+}

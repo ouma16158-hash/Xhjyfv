@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onraiser – Job-Seeking Platform</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0d6efd">
+  <meta name="description" content="Onraiser connects job seekers with the right employers through smart matching, video introductions, and powerful experience filters." />
+  <meta name="keywords" content="job search, hiring, employers, job seekers, career platform, Onraiser" />
+  <meta name="author" content="Onraiser" />
+  <meta property="og:title" content="Onraiser – Job-Seeking Platform" />
+  <meta property="og:description" content="Join Onraiser – the platform connecting job seekers with the right employers." />
+  <meta property="og:url" content="/" />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="/" />
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+
+  <!-- Structured Data for Search Engines & AI -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Onraiser",
+    "url": "https://onraiser.replit.app",
+    "description": "Onraiser is a smart job-seeking platform connecting skilled professionals with the right employers through video introductions, industry matching, and experience filters.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://onraiser.replit.app/public-jobs.html?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Onraiser",
+    "url": "https://onraiser.replit.app",
+    "logo": "https://onraiser.replit.app/images/favicon.png",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "onraiser3889@gmail.com",
+      "contactType": "customer support"
+    },
+    "description": "Onraiser connects job seekers with employers through smart matching based on industry, location, salary, and experience. Seekers upload video introductions and document vaults. Employers post jobs and use strict or open experience filters to find the right candidates."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    "hiringOrganization": {
+      "@type": "Organization",
+      "name": "Onraiser",
+      "sameAs": "https://onraiser.replit.app"
+    },
+    "description": "Browse hundreds of open job positions across Engineering, Business, Health, Arts, and Humanities. Apply directly with your Onraiser profile — video intro, CV, and smart matching included.",
+    "jobLocation": {
+      "@type": "Place",
+      "address": { "@type": "PostalAddress", "addressCountry": "KE" }
+    },
+    "title": "Open Positions on Onraiser"
+  }
+  </script>
+
+  <style>
+    /* ── Hero Slideshow Background ── */
+    .ty-hero {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-slideshow {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.2s ease-in-out;
+    }
+
+    .hero-slide.active { opacity: 1; }
+
+    /* Dark overlay so text stays readable over any photo */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(13,13,13,0.68) 0%, rgba(0,90,70,0.55) 100%);
+      z-index: 1;
+    }
+
+    /* Push text above slideshow layers */
+    .ty-hero-text { position: relative; z-index: 2; }
+    .ty-hero-img  { position: relative; z-index: 2; }
+
+    /* Override text colours for hero-on-photo */
+    .ty-hero .ty-hero-text h1,
+    .ty-hero .ty-hero-text h2,
+    .ty-hero .ty-hero-text h3 {
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+    }
+
+    .ty-hero .ty-hero-text .hero-desc {
+      color: rgba(255,255,255,0.88);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin: 14px 0 20px;
+      max-width: 520px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+
+    /* No-photo fallback gradient */
+    .hero-no-photos {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0d2137 0%, #00695c 100%);
+      z-index: 0;
+    }
+
+    /* Slideshow dot indicators */
+    .slideshow-dots {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 3;
+    }
+
+    .slideshow-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      transition: background 0.3s;
+      cursor: pointer;
+    }
+
+    .slideshow-dot.active { background: #fff; }
+
+    /* Value props section */
+    .value-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      padding: 3rem 2rem;
+      background: #f8f9fa;
+    }
+
+    .value-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+
+    .value-card .vc-icon { font-size: 2rem; margin-bottom: 10px; }
+    .value-card h4 { font-size: 1rem; font-weight: 700; color: #1d3557; margin-bottom: 8px; }
+    .value-card p { font-size: 0.88rem; color: #666; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <header class="ty-header">
+    <div class="ty-logo">Onraiser</div>
+    <nav class="ty-nav">
+      <a href="public-jobs.html" class="ty-signin" style="margin-right:8px;">Browse Jobs</a>
+      <a href="login.html" class="ty-signin">Sign In</a>
+      <a href="register.html" class="ty-signup">Sign Up</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section with Slideshow Background -->
+  <section class="ty-hero" style="min-height:420px;align-items:center;">
+    <!-- Background layers -->
+    <div id="heroNoPhotos" class="hero-no-photos"></div>
+    <div class="hero-slideshow" id="heroSlideshow"></div>
+    <div class="hero-overlay"></div>
+
+    <!-- Text Content -->
+    <div class="ty-hero-text">
+      <h1 style="font-size:2.2rem;font-weight:800;">Find Your Perfect Career Match</h1>
+      <h2 style="font-size:1.3rem;font-weight:600;margin-top:6px;">Smart Hiring. Real Candidates. Zero Guesswork.</h2>
+
+      <p class="hero-desc" id="employerDesc">
+        <strong style="color:#00e5c0;">For Employers:</strong> Get to know candidates before the interview — watch their video introductions, browse their portfolios, and use smart experience filters (open/closed) to instantly narrow down who's actually qualified. No more sifting through hundreds of unfit applications.
+      </p>
+      <p class="hero-desc" id="seekerDesc">
+        <strong style="color:#81ecec;">For Job Seekers:</strong> Stop scrolling through irrelevant listings. Onraiser's smart matching surfaces only the positions that align with your field, location, and salary expectations — saving you hours every week and putting you in front of the right employers.
+      </p>
+
+      <a href="register.html" class="ty-cta-btn" style="background:#00b894;font-size:1.05rem;padding:14px 32px;border-radius:8px;margin-top:8px;">Join Onraiser →</a>
+    </div>
+
+    <div class="ty-hero-img" style="opacity:0.0;">
+      <!-- Intentionally invisible — slideshow fills the background -->
+    </div>
+
+    <!-- Dot indicators (shown when photos exist) -->
+    <div class="slideshow-dots" id="slideshowDots" style="display:none;"></div>
+  </section>
+
+  <!-- Value Props -->
+  <div class="value-section">
+    <div class="value-card">
+      <h4>Video Introductions</h4>
+      <p>Seekers upload short video intros so employers can make informed decisions before reaching out.</p>
+    </div>
+    <div class="value-card">
+      <h4>Smart Matching</h4>
+      <p>Our algorithm matches seekers to companies based on industry, sub-field, location, and salary — not just keywords.</p>
+    </div>
+    <div class="value-card">
+      <h4>Experience Filters</h4>
+      <p>Employers set open or strict experience requirements so only the right applicants get through.</p>
+    </div>
+    <div class="value-card">
+      <h4>Document Vault</h4>
+      <p>Seekers store CVs, degrees, and certificates — all in one place for employers to access instantly.</p>
+    </div>
+  </div>
+
+  <section class="ty-about">
+    <h2>Why Onraiser?</h2>
+    <p>
+      Traditional job boards are noisy and generic. Onraiser is built differently — every employer profile, every job post, and every seeker is matched with precision. Employers spend less time screening; seekers spend less time applying to the wrong places. Join the platform where quality connections happen faster.
+    </p>
+  </section>
+
+  <footer class="ty-footer">
+    <p>&copy; 2025 Onraiser. All rights reserved. &nbsp;|&nbsp; <a href="mailto:onraiser3889@gmail.com" style="color:#00b894;">onraiser3889@gmail.com</a></p>
+  </footer>
+
+  <!-- ── PWA Install Banner ── -->
+  <div id="installBanner" style="
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 9999;
+    background: #0f172a;
+    color: #fff;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.35);
+    flex-wrap: wrap;
+  ">
+    <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:220px;">
+      <img src="/images/icon-192.png" style="width:42px;height:42px;border-radius:10px;flex-shrink:0;" alt="Onraiser"/>
+      <div>
+        <div style="font-weight:700;font-size:0.97rem;line-height:1.2;">Install Onraiser App</div>
+        <div style="font-size:0.76rem;color:rgba(255,255,255,0.6);margin-top:3px;">Add to your home screen — free &amp; fast</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
+      <button id="installBtn" style="
+        background:#00b894; color:#fff; border:none;
+        padding:10px 22px; border-radius:8px;
+        font-size:0.88rem; font-weight:700; cursor:pointer; white-space:nowrap;
+      ">Install</button>
+      <button id="dismissBanner" style="
+        background:transparent; color:rgba(255,255,255,0.5);
+        border:1px solid rgba(255,255,255,0.2);
+        padding:10px 14px; border-radius:8px;
+        font-size:0.85rem; cursor:pointer; white-space:nowrap;
+      ">Not now</button>
+    </div>
+  </div>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js")
+        .then(() => console.log("Service Worker Registered"))
+        .catch(e => console.log("SW registration failed:", e));
+    }
+
+    // ── PWA Install Banner Logic ──
+    let _deferredPrompt = null;
+    const _banner      = document.getElementById('installBanner');
+    const _installBtn  = document.getElementById('installBtn');
+    const _dismissBtn  = document.getElementById('dismissBanner');
+
+    function hideBanner() {
+      if (_banner) _banner.style.display = 'none';
+    }
+    function showBanner() {
+      if (_banner) _banner.style.display = 'flex';
+    }
+
+    // Hide if already installed (standalone mode)
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                      || window.navigator.standalone === true;
+
+    // Hide if user previously dismissed permanently
+    const dismissed = localStorage.getItem('onraiser_pwa_dismissed');
+
+    if (isStandalone || dismissed) {
+      hideBanner();
+    }
+    // Otherwise it shows by default (display:flex in HTML)
+
+    // Capture native install prompt when browser fires it
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      _deferredPrompt = e;
+    });
+
+    // When installed via native prompt, hide banner
+    window.addEventListener('appinstalled', () => {
+      hideBanner();
+      _deferredPrompt = null;
+    });
+
+    // Install button
+    if (_installBtn) {
+      _installBtn.addEventListener('click', async () => {
+        if (_deferredPrompt) {
+          _deferredPrompt.prompt();
+          const { outcome } = await _deferredPrompt.userChoice;
+          _deferredPrompt = null;
+          if (outcome === 'accepted') hideBanner();
+        } else {
+          // Trigger download directly
+          const a = document.createElement('a');
+          a.href = window.location.href;
+          a.download = 'Onraiser';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          hideBanner();
+        }
+      });
+    }
+
+    // Dismiss button — remember choice
+    if (_dismissBtn) {
+      _dismissBtn.addEventListener('click', () => {
+        hideBanner();
+        localStorage.setItem('onraiser_pwa_dismissed', '1');
+      });
+    }
+  </script>
+
+  <script>
+    // ── Hero Slideshow Logic ──
+    let slides = [];
+    let currentSlide = 0;
+    let slideshowTimer = null;
+
+    async function loadHeroSlideshow() {
+      try {
+        const res = await fetch('/api/public/landing-images');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data.images || data.images.length === 0) return;
+
+        const container = document.getElementById('heroSlideshow');
+        const dotsEl    = document.getElementById('slideshowDots');
+        const noBg      = document.getElementById('heroNoPhotos');
+
+        // Hide fallback gradient
+        if (noBg) noBg.style.display = 'none';
+        dotsEl.style.display = 'flex';
+
+        data.images.forEach((img, i) => {
+          const slide = document.createElement('div');
+          slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
+          slide.style.backgroundImage = `url('${img.url}')`;
+          container.appendChild(slide);
+          slides.push(slide);
+
+          const dot = document.createElement('div');
+          dot.className = 'slideshow-dot' + (i === 0 ? ' active' : '');
+          dot.addEventListener('click', () => goToSlide(i));
+          dotsEl.appendChild(dot);
+        });
+
+        if (slides.length > 1) {
+          slideshowTimer = setInterval(nextSlide, 5000);
+        }
+      } catch (e) {
+        console.log('No landing images configured.');
+      }
+    }
+
+    function goToSlide(n) {
+      slides[currentSlide].classList.remove('active');
+      document.querySelectorAll('.slideshow-dot')[currentSlide]?.classList.remove('active');
+      currentSlide = (n + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+      document.querySelectorAll('.slideshow-dot')[currentSlide]?.classList.add('active');
+    }
+
+    function nextSlide() { goToSlide(currentSlide + 1); }
+
+    loadHeroSlideshow();
+  </script>
+</body>
+</html>

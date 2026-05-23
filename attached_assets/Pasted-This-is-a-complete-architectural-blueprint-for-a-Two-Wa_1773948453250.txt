@@ -1,0 +1,76 @@
+This is a complete architectural blueprint for a Two-Way Professional Matching Platform.
+Imagine a system where, instead of searching through thousands of random job posts, a "Match" only appears if both the Job Seeker and the Company are exactly what the other is looking for. It works like a high-end dating app, but for careers.
+1. The Job Seeker (User) Setup
+The User must complete two distinct pages: Identity and Search Filters.
+Page A: User Info (The "Who I Am")
+This data is what Companies use to find the User.
+ * Biometrics:
+   * Full Name: [Text Input]
+   * Gender: [Dropdown: Male, Female, Other]
+   * Age: [Numeric Input]
+ * Media Portfolio:
+   * Profile Photo: [Single Image Upload]
+   * Video Intros: [Upload up to 10 videos, max 3 minutes each]. Users can name each video.
+   * Document Vault: [Upload up to 10 PDF/Docs]. Users can name each (e.g., "Degree," "CV").
+ * Education & Professional Major:
+   * Major Category: [Dropdown: Engineering & Tech, Business & Admin, Health & Sciences, Arts & Design, Humanities/Social]
+   * Sub-Major Selection: [Conditional Dropdown based on Major]:
+     * If Engineering: Civil & Structural, Software & Data, Electrical, Mechanical.
+     * If Business: Finance & Accounting, Marketing, HR, Operations.
+     * If Health: Clinical, Laboratory, Public Health, Admin.
+   * Education Level: [Dropdown: Certificate, Diploma, Bachelor’s, Master’s, PhD]
+ * Logistics & Pay:
+   * Current Location: [Text: City/Country]
+   * Relocation: [Toggle: Yes / No]
+   * Night Shift Availability: [Toggle: Yes / No]
+   * Minimum Salary: [Numeric: The absolute lowest pay they will accept]
+Page B: User Preferences (The "What I Want")
+This filters which Companies appear on the User's Dashboard.
+ * Workplace Mode: [Checkboxes: Remote, Hybrid, On-site]
+ * Company Size: [Checkboxes: Startup, Mid-size, Corporate]
+ * Target Industry: [Multi-select: Pick any from the Major Categories]
+ * Recency (The "Today" Filter): [Button: Only show jobs posted in the last 24 hours]
+2. The Company (Employer) Setup
+The Company fills out these pages for every job they post.
+Page A: Company Info (The "What the Job Is")
+This data is what Users use to find the Job.
+ * Identity: Company Name, Logo, and Industry.
+ * Work Mode: [Selection: Remote, Hybrid, or On-site]
+ * Salary: [Numeric: The Maximum budget for this role]
+ * Shift Type: [Toggle: Day Shift or Night Shift]
+ * Location: [Text: Office Address]
+ * Relocation Perk: [Toggle: We provide relocation assistance: Yes / No]
+ * Post Date: [Automatic Timestamp]
+Page B: Company Preferences (The "Ideal Candidate")
+This filters which Users appear on the Company's Dashboard.
+ * Demographics:
+   * Gender Preference: [Dropdown: Male, Female, or Any]
+   * Minimum Age: [Numeric: e.g., Must be at least 21]
+ * Qualifications:
+   * Required Major & Sub-Major: [Must match the User’s selections exactly]
+   * Min Education Level: [Dropdown: e.g., Must have at least a Bachelor’s]
+ * Logistics:
+   * Relocation Requirement: [Toggle: Candidate must be willing to move]
+   * Night Shift Requirement: [Toggle: Candidate must work nights]
+ * Recency Filter: [Button: Only show candidates who applied in the last 24 hours]
+3. The Dashboard Matching Tables
+The system compares the Info of one side against the Preferences of the other.
+Table 1: User Dashboard (Seeing Companies)
+| What the User Sees | Matching Requirement |
+|---|---|
+| The Job Card | Company Info must match User Preferences. |
+| Salary Display | Company Max Budget \ge User Min Salary. |
+| Work Mode | Company Mode must be in the User’s Preferred list. |
+| "Today" Filter | Only shows jobs where Post Date = Today. |
+Table 2: Company Dashboard (Seeing Candidates)
+| What the Company Sees | Matching Requirement |
+|---|---|
+| Candidate Profile | User Info must match Company Preferences. |
+| Age/Gender | User Age \ge Company Min Age AND Gender matches. |
+| Major/Skills | User Sub-Major must match Company Requirement. |
+| Video/Docs | All 10 videos and 10 docs are visible for review. |
+| "Today" Filter | Only shows users who applied today. |
+4. Why This Works (The "Secret Sauce")
+This platform eliminates "spam." A user never sees a job they aren't qualified for or that pays too low. A company never sees a candidate who doesn't meet their age, gender, or education requirements.
+By adding the 10 videos (3 mins each) and 10 named documents, the company can "meet" the candidate virtually before ever scheduling an interview, making the process 10x faster.
+Would you like me to create the technical "Step-by-Step" guide for the developer to build the database tables for this logic?

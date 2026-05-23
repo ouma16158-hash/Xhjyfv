@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onraiser | Register</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    .ty-password-toggle {
+      position: absolute; right: 10px; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none; font-size: 0.9rem;
+      cursor: pointer; color: #00b894;
+    }
+    .ty-terms { margin-top: 1rem; font-size: 0.9rem; color: #555; text-align: left; }
+    .ty-terms input { margin-right: 6px; }
+    .ty-login-link { text-align: center; margin-top: 1.2rem; font-size: 0.9rem; }
+    .ty-login-link a { color: #0984e3; text-decoration: none; font-weight: 600; }
+    .ty-message { margin-top: 1rem; font-size: 0.9rem; color: red; text-align: center; }
+    .ty-loading { text-align: center; margin-top: 1rem; font-size: 0.95rem; color: #0984e3; }
+    .role-selector { display: flex; gap: 12px; margin-bottom: 1.2rem; }
+    .role-btn {
+      flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px;
+      background: white; cursor: pointer; font-size: 0.95rem; font-weight: 600;
+      color: #555; transition: all 0.2s; text-align: center;
+    }
+    .role-btn:hover { border-color: #00b894; color: #00b894; }
+    .role-btn.active { border-color: #00b894; background: #00b894; color: white; }
+    .role-label { font-size: 0.85rem; display: block; margin-top: 4px; opacity: 0.8; }
+
+    /* Divider */
+    .or-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 18px 0 14px; color: #999; font-size: 0.85rem;
+    }
+    .or-divider::before, .or-divider::after {
+      content: ''; flex: 1; height: 1px; background: #e0e0e0;
+    }
+
+    /* Google button */
+    .google-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 11px 16px;
+      border: 1.5px solid #dadce0; border-radius: 8px;
+      background: white; color: #3c4043; font-size: 0.92rem; font-weight: 600;
+      cursor: pointer; transition: background 0.15s, box-shadow 0.15s;
+    }
+    .google-btn:hover { background: #f8f8f8; box-shadow: 0 1px 4px rgba(0,0,0,0.12); }
+    .google-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .google-btn svg { flex-shrink: 0; }
+
+    #googleSection { display: none; }
+  </style>
+</head>
+<body>
+  <div class="ty-register-box">
+    <div class="ty-logo-form">Onraiser</div>
+
+    <label style="margin-bottom:8px; display:block; font-weight:600;">I am a...</label>
+    <div class="role-selector">
+      <button type="button" class="role-btn active" id="roleSeeker" onclick="selectRole('seeker')">
+        Job Seeker
+        <span class="role-label">Looking for opportunities</span>
+      </button>
+      <button type="button" class="role-btn" id="roleEmployer" onclick="selectRole('employer')">
+        Employer
+        <span class="role-label">Hiring talent</span>
+      </button>
+    </div>
+
+    <form class="ty-form" id="registerForm">
+      <label>Email *</label>
+      <input type="email" id="email" required />
+
+      <label>Password *</label>
+      <div class="ty-password">
+        <input type="password" id="password" required />
+        <button type="button" class="ty-password-toggle" onclick="toggleVisibility('password')">Show</button>
+      </div>
+
+      <label>Confirm Password *</label>
+      <div class="ty-password">
+        <input type="password" id="confirmPassword" required />
+        <button type="button" class="ty-password-toggle" onclick="toggleVisibility('confirmPassword')">Show</button>
+      </div>
+
+      <div class="ty-terms">
+        <label>
+          <input type="checkbox" required />
+          I accept the <a href="#">terms and conditions</a>
+        </label>
+      </div>
+
+      <div class="ty-message" id="registerMsg"></div>
+      <div class="ty-loading" id="loadingMsg" style="display: none;">Processing...</div>
+
+      <button type="submit" class="ty-submit-btn">Sign Up</button>
+    </form>
+
+    <!-- Google Sign-In option -->
+    <div id="googleSection">
+      <div class="or-divider">or</div>
+      <button class="google-btn" id="googleBtn" onclick="startGoogleSignIn()">
+        <svg width="20" height="20" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Continue with Google
+      </button>
+      <p id="googleMsg" style="text-align:center;font-size:0.85rem;color:red;margin-top:8px;display:none;"></p>
+    </div>
+
+    <div class="ty-login-link">
+      Already have an account? <a href="login.html">Login</a>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    let selectedRole = 'seeker';
+
+    function selectRole(role) {
+      selectedRole = role;
+      document.getElementById('roleSeeker').classList.toggle('active', role === 'seeker');
+      document.getElementById('roleEmployer').classList.toggle('active', role === 'employer');
+    }
+
+    function toggleVisibility(id) {
+      const input = document.getElementById(id);
+      const toggleBtn = input.nextElementSibling;
+      if (input.type === "password") { input.type = "text"; toggleBtn.innerText = "Hide"; }
+      else { input.type = "password"; toggleBtn.innerText = "Show"; }
+    }
+
+    // ── Normal Email Register ──
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById("registerMsg");
+      const loader = document.getElementById("loadingMsg");
+      msg.innerText = "";
+      loader.style.display = "block";
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (password !== confirmPassword) {
+        loader.style.display = "none";
+        msg.innerText = "Passwords do not match.";
+        return;
+      }
+
+      try {
+        const res = await fetch(`${config.API_BASE_URL}/api/send-otp`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, role: selectedRole })
+        });
+        const data = await res.json();
+        loader.style.display = "none";
+        if (res.ok) {
+          localStorage.setItem("email", email);
+          localStorage.setItem("password", password);
+          localStorage.setItem("userRole", selectedRole);
+          window.location.href = "confirm.html";
+        } else {
+          msg.innerText = data.error || "Failed to send OTP.";
+        }
+      } catch (error) {
+        loader.style.display = "none";
+        msg.innerText = "Network error. Try again later.";
+      }
+    });
+
+    // ── Google Sign-In ──
+    let _googleClientId = null;
+
+    async function initGoogleSignIn() {
+      try {
+        const res = await fetch(`${config.API_BASE_URL}/api/auth/google-config`);
+        const data = await res.json();
+        if (data.clientId) {
+          _googleClientId = data.clientId;
+          google.accounts.id.initialize({
+            client_id: _googleClientId,
+            callback: handleGoogleCredential,
+            auto_select: false,
+            cancel_on_tap_outside: true
+          });
+          document.getElementById('googleSection').style.display = 'block';
+        }
+      } catch (e) {
+        console.log('Google Sign-In not configured.');
+      }
+    }
+
+    function startGoogleSignIn() {
+      if (!_googleClientId) return;
+      const btn = document.getElementById('googleBtn');
+      btn.disabled = true;
+      btn.textContent = 'Opening Google…';
+      google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          // One Tap was blocked – fall back to popup flow
+          google.accounts.oauth2 && google.accounts.oauth2.initCodeClient
+            ? null
+            : console.warn('Google prompt not available in this context');
+          btn.disabled = false;
+          btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Continue with Google`;
+          showGoogleMsg('Google Sign-In prompt was blocked. Try allowing pop-ups for this site.', true);
+        }
+      });
+    }
+
+    async function handleGoogleCredential(response) {
+      const btn = document.getElementById('googleBtn');
+      btn.disabled = true;
+
+      showGoogleMsg('', false);
+
+      try {
+        const res = await fetch(`${config.API_BASE_URL}/api/auth/google`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ credential: response.credential, role: selectedRole })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          showGoogleMsg(data.error || 'Google sign-in failed. Please try again.', true);
+          btn.disabled = false;
+          return;
+        }
+
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('email', data.email);
+
+        if (data.isNew) {
+          window.location.href = 'personal.html';
+        } else {
+          // Existing user — same redirect logic as login
+          redirectAfterLogin(data.token, data.current_step, data.status);
+        }
+      } catch (err) {
+        showGoogleMsg('Network error. Please try again.', true);
+        btn.disabled = false;
+      }
+    }
+
+    async function redirectAfterLogin(token, step, status) {
+      if (status === 'suspended') { window.location.href = 'suspended.html'; return; }
+      if (status === 'disapproved') { window.location.href = 'submission.html'; return; }
+      try {
+        const subRes = await fetch(`${config.API_BASE_URL}/api/user/subscription-status`, { headers: { Authorization: `Bearer ${token}` } });
+        const subData = await subRes.json();
+        if (subData.subscription !== 'premium') { window.location.href = 'subscriptions.html'; return; }
+      } catch(e) {}
+      if (status === 'approved') { window.location.href = 'dashboard_page.html'; return; }
+      if (step === 'personal') window.location.href = 'personal.html';
+      else if (step === 'preferences') window.location.href = 'preferences.html';
+      else window.location.href = 'subscriptions.html';
+    }
+
+    function showGoogleMsg(msg, isError) {
+      const el = document.getElementById('googleMsg');
+      el.textContent = msg;
+      el.style.color = isError ? 'red' : 'green';
+      el.style.display = msg ? 'block' : 'none';
+    }
+
+    // Init after GSI library loads
+    window.addEventListener('load', () => {
+      if (typeof google !== 'undefined') {
+        initGoogleSignIn();
+      } else {
+        const script = document.querySelector('script[src*="accounts.google.com"]');
+        if (script) script.addEventListener('load', initGoogleSignIn);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Onraiser – Profile Setup</title>
+  <link rel="stylesheet" href="match-form.css" />
+  <style>
+    /* ── Override match-form.css with post-job design ── */
+    * { box-sizing: border-box; }
+    body { background: #f4f7fb; }
+
+    .tk-header {
+      background: linear-gradient(135deg, #007bff 0%, #00b894 100%);
+      color: white;
+      text-align: left;
+      padding: 14px 20px;
+      font-size: 20px;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .tk-header a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .tk-container {
+      max-width: 680px;
+      margin: 28px auto;
+      padding: 0 16px 40px;
+      background: transparent;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .tk-form {
+      background: white;
+      border-radius: 10px;
+      padding: 28px 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .tk-form h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #007bff;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e8f4ff;
+    }
+
+    .tk-form label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      margin-top: 14px;
+      margin-bottom: 5px;
+    }
+
+    .tk-form input[type="text"],
+    .tk-form input[type="number"],
+    .tk-form input[type="email"],
+    .tk-form input[type="file"],
+    .tk-form select,
+    .tk-form textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #d0dce8;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #333;
+      background: #fafcff;
+      transition: border-color 0.2s;
+      outline: none;
+      margin-top: 0;
+    }
+    .tk-form input[type="file"] { padding: 7px 10px; background: #f0f7ff; }
+    .tk-form input:focus,
+    .tk-form select:focus,
+    .tk-form textarea:focus { border-color: #007bff; background: #fff; }
+
+    .tk-form button[type="submit"],
+    .tk-form #submitBtn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #007bff 0%, #00b894 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: opacity 0.2s;
+    }
+    .tk-form button[type="submit"]:hover,
+    .tk-form #submitBtn:hover { opacity: 0.92; }
+
+    .tk-note {
+      background: #e8f4ff;
+      border-left: 3px solid #007bff;
+      color: #1a4f8a;
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 13px;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #007bff;
+      margin: 24px 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e8f4ff;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    /* File upload components */
+    .file-upload-group {
+      background: #f0f7ff;
+      border: 1.5px dashed #007bff;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      padding: 10px;
+      background: white;
+      border: 1px solid #d0dce8;
+      border-radius: 6px;
+    }
+    .file-item input[type="text"] {
+      flex: 1;
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      width: auto;
+    }
+    .file-item .upload-status { font-size: 0.8rem; color: #888; min-width: 80px; }
+    .file-item .upload-status.done { color: #00b894; }
+    .file-item .upload-status.error { color: #dc3545; }
+    .add-file-btn {
+      background: none;
+      border: 1.5px dashed #00b894;
+      color: #00b894;
+      padding: 9px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 8px;
+      transition: background 0.15s;
+    }
+    .add-file-btn:hover { background: #e8fff5; }
+    .remove-file-btn {
+      background: #fee2e2;
+      color: #dc3545;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .progress-bar-wrap {
+      background: #e0ecff;
+      border-radius: 4px;
+      height: 5px;
+      overflow: hidden;
+      display: none;
+      margin-top: 6px;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, #007bff, #00b894);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    /* Toggle switch */
+    .tk-toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .tk-toggle-row label { flex: 1; margin: 0; }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      border-radius: 26px;
+      transition: .3s;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px; width: 18px;
+      left: 4px; bottom: 4px;
+      background-color: white;
+      border-radius: 50%;
+      transition: .3s;
+    }
+    input:checked + .toggle-slider { background-color: #007bff; }
+    input:checked + .toggle-slider:before { transform: translateX(24px); }
+
+    .tk-spinner {
+      display: none;
+      width: 32px;
+      height: 32px;
+      border: 3px solid #cce5ff;
+      border-top-color: #007bff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 16px auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 600px) {
+      .tk-container { margin: 14px auto; padding: 0 10px 24px; }
+      .tk-form { padding: 18px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="spinnerOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+    <div class="tk-spinner" style="display:block;"></div>
+  </div>
+
+  <header class="tk-header">
+    <a href="dashboard_page.html">&#8592;</a>
+    <span>Profile Setup</span>
+  </header>
+
+  <main class="tk-container">
+    <form id="personalForm" class="tk-form">
+      <h2 id="formTitle">Profile Setup</h2>
+      <p class="tk-note" id="formSubtitle"></p>
+
+      <!-- SEEKER FIELDS -->
+      <div id="seekerFields">
+        <div class="section-title">Basic Information</div>
+
+        <label>Name</label>
+        <input type="text" name="full_name" />
+
+        <div class="section-title">Media Portfolio</div>
+
+        <label>Profile Photo</label>
+        <input type="file" id="profilePhotoInput" accept="image/*" />
+        <div id="photoPreviewWrap" style="margin-top:8px;"></div>
+        <input type="hidden" name="profile_photo_url" id="profilePhotoUrl" />
+        <div class="progress-bar-wrap" id="photoProgress"><div class="progress-bar" id="photoProgressBar"></div></div>
+
+        <label style="margin-top:16px;">
+          Video – Show What You Do Best (Your Onraiser)
+          <span style="color:#e53e3e;font-weight:700;"> *Required</span>
+          <span style="color:#888;font-size:0.85rem;"> (up to 10 videos, max 3 min each)</span>
+        </label>
+        <p style="font-size:0.83rem;color:#555;margin:4px 0 10px;line-height:1.5;">
+          Upload a short video showing your skills and what you do best. Employers watch these to get to know you before reaching out — this is your Onraiser moment.
+        </p>
+        <div id="videoRequiredNotice" style="display:none;background:#fff5f5;border:2px solid #e53e3e;border-radius:8px;padding:12px 16px;margin-bottom:12px;color:#c53030;font-size:0.9rem;font-weight:600;">
+          ⚠️ Please upload at least one video showing what you do best. Companies need this to get to know you before reaching out.
+        </div>
+        <div class="file-upload-group" id="videosGroup">
+          <div id="videosList"></div>
+          <button type="button" class="add-file-btn" id="addVideoBtn">+ Add Video</button>
+        </div>
+        <input type="hidden" name="video_intros" id="videoIntrosData" value="[]" />
+
+        <label>CV & Supporting Documents <span style="color:#888;font-size:0.85rem;">(CV, certificates, academic documents – up to 10 files)</span></label>
+        <div class="file-upload-group" id="docsGroup">
+          <div id="docsList"></div>
+          <button type="button" class="add-file-btn" id="addDocBtn">+ Add Document</button>
+        </div>
+        <input type="hidden" name="document_vault" id="documentVaultData" value="[]" />
+
+        <div class="section-title">Area of Work</div>
+
+        <label>Main Area</label>
+        <select name="occupation" id="majorCategory">
+          <option value="">Select Area</option>
+          <option value="Engineering & Tech">Engineering & Tech</option>
+          <option value="Business & Admin">Business & Admin</option>
+          <option value="Health & Sciences">Health & Sciences</option>
+          <option value="Arts & Design">Arts & Design</option>
+          <option value="Humanities/Social">Humanities/Social</option>
+        </select>
+
+        <label>Sub Area</label>
+        <select name="employment_type" id="subMajor">
+          <option value="">Select Sub Area</option>
+        </select>
+
+        <div class="section-title">Education &amp; Qualification</div>
+
+        <label>Education / Professional Qualification</label>
+        <select name="education">
+          <option value="">Select Qualification</option>
+          <option value="High School">High School</option>
+          <option value="Certificate">Certificate</option>
+          <option value="Diploma">Diploma</option>
+          <option value="Bachelor's Degree">Bachelor's Degree</option>
+          <option value="Master's Degree">Master's Degree</option>
+          <option value="PhD / Doctorate">PhD / Doctorate</option>
+          <option value="Professional Certification">Professional Certification</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label>Years of Experience</label>
+        <select name="religious_importance">
+          <option value="">Select experience level</option>
+          <option value="Entry Level (0–1 years)">Entry Level (0–1 years)</option>
+          <option value="Junior (1–3 years)">Junior (1–3 years)</option>
+          <option value="Mid-Level (3–5 years)">Mid-Level (3–5 years)</option>
+          <option value="Senior (5–8 years)">Senior (5–8 years)</option>
+          <option value="Expert (8+ years)">Expert (8+ years)</option>
+        </select>
+
+        <label>Small Bio</label>
+        <textarea name="religion" rows="3" placeholder="Briefly describe yourself and the work you do"></textarea>
+
+        <label>Skills</label>
+        <textarea name="skin_color" rows="3" placeholder="List your key skills"></textarea>
+
+        <label>Projects</label>
+        <textarea name="political_views" rows="3" placeholder="Mention projects you have worked on"></textarea>
+
+        <label>Referees</label>
+        <textarea name="children" rows="3" placeholder="Names and contacts of referees"></textarea>
+
+        <div class="section-title">Location & Address</div>
+
+        <label>Current Location (City, Country)</label>
+        <input type="text" name="country_of_residence" placeholder="e.g. Nairobi, Kenya" />
+
+        <label>Address</label>
+        <textarea name="body_type" rows="2" placeholder="Your address"></textarea>
+      </div>
+
+      <!-- EMPLOYER FIELDS -->
+      <div id="employerFields" style="display:none;">
+        <div class="section-title">Company Identity</div>
+
+        <label>Company Name</label>
+        <input type="text" name="full_name" id="companyName" />
+
+        <label>Company Photo / Logo</label>
+        <input type="file" id="companyLogoInput" accept="image/*" />
+        <div id="logoPreviewWrap" style="margin-top:8px;"></div>
+        <input type="hidden" name="profile_photo_url" id="companyLogoUrl" />
+        <div class="progress-bar-wrap" id="logoProgress"><div class="progress-bar" id="logoProgressBar"></div></div>
+
+        <label>Company Video</label>
+        <input type="file" id="companyVideoInput" accept="video/*" />
+        <div id="companyVideoPreviewWrap" style="margin-top:8px;"></div>
+        <input type="hidden" name="profile_video_url" id="companyVideoUrl" />
+        <div class="progress-bar-wrap" id="companyVideoProgress"><div class="progress-bar" id="companyVideoProgressBar"></div></div>
+
+        <label>Office Location (City, Country)</label>
+        <input type="text" name="country_of_residence" placeholder="e.g. Nairobi, Kenya" />
+
+        <div class="section-title">Industry</div>
+
+        <label>Main Area</label>
+        <select name="occupation" id="companyMajorCategory">
+          <option value="">Select Area</option>
+          <option value="Engineering & Tech">Engineering & Tech</option>
+          <option value="Business & Admin">Business & Admin</option>
+          <option value="Health & Sciences">Health & Sciences</option>
+          <option value="Arts & Design">Arts & Design</option>
+          <option value="Humanities/Social">Humanities/Social</option>
+        </select>
+
+        <label>Sub Area</label>
+        <select name="employment_type" id="companySubMajor">
+          <option value="">Select Sub Area</option>
+        </select>
+
+        <label>Company Bio</label>
+        <textarea name="religion" rows="4" placeholder="Briefly describe your company"></textarea>
+      </div>
+
+      <div class="tk-spinner" id="spinner"></div>
+      <button type="submit" id="submitBtn">Continue to Preferences</button>
+    </form>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="auth-guard.js"></script>
+  <script src="personal.js"></script>
+</body>
+</html>

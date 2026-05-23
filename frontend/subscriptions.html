@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onraiser – Choose Your Plan</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: #0d0d0d;
+      color: white;
+      text-align: center;
+      padding: 28px 20px 22px;
+    }
+
+    .page-header h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: 2px; }
+    .page-header p { color: #aaa; margin-top: 6px; font-size: 0.95rem; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 20px 60px;
+    }
+
+    /* ── Payment Methods (shown first) ── */
+    .payment-methods {
+      background: white;
+      border-radius: 14px;
+      padding: 28px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      margin-bottom: 32px;
+    }
+
+    .payment-methods h3 {
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+      color: #222;
+    }
+
+    .payment-methods .sub-label {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 18px;
+    }
+
+    .payment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+    }
+
+    .payment-option {
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-size: 0.9rem;
+    }
+
+    .payment-option:hover { border-color: #00b894; background: #f0fdf9; }
+    .payment-option.selected { border-color: #00b894; background: #e6faf5; }
+    .payment-icon { font-size: 2em; margin-bottom: 8px; }
+
+    /* ── Pricing Cards ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+
+    .pricing-card {
+      background: white;
+      border-radius: 14px;
+      padding: 28px 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      text-align: center;
+      position: relative;
+      transition: transform 0.25s;
+    }
+
+    .pricing-card:hover { transform: translateY(-4px); }
+    .pricing-card.popular { border: 2px solid #00b894; }
+
+    .popular-badge {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #00b894;
+      color: white;
+      padding: 4px 18px;
+      border-radius: 20px;
+      font-size: 0.82em;
+      font-weight: 600;
+    }
+
+    .plan-name { font-size: 1.3em; font-weight: 700; margin-bottom: 8px; color: #222; }
+    .plan-price { font-size: 2.4em; font-weight: 800; color: #00b894; margin-bottom: 4px; }
+    .plan-period { color: #888; font-size: 0.9em; margin-bottom: 18px; }
+
+    .plan-features {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 20px;
+      text-align: left;
+    }
+
+    .plan-features li {
+      padding: 7px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.9rem;
+      color: #444;
+    }
+
+    .plan-features li:last-child { border-bottom: none; }
+    .feature-ok { color: #00b894; margin-right: 6px; }
+
+    .subscribe-btn {
+      background: #00b894;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+
+    .subscribe-btn:hover { background: #00a381; }
+    .subscribe-btn:disabled { background: #ccc; cursor: not-allowed; }
+    .subscribe-btn.current-plan { background: #28a745; }
+
+    /* ── Modal ── */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 14px;
+      padding: 28px;
+      max-width: 480px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .payment-info {
+      background: #f8f9fa;
+      padding: 14px;
+      border-radius: 8px;
+      margin: 14px 0;
+      font-size: 0.9rem;
+    }
+
+    .spinner {
+      display: none;
+      width: 18px; height: 18px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #00b894;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 24px;
+      color: #00b894;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .select-method-hint {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.87rem;
+      color: #7a5c00;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <h1>Onraiser</h1>
+    <p>Choose a plan to start connecting</p>
+  </div>
+
+  <div id="noSubscriptionBanner" style="display:none;background:#ff6b35;color:white;text-align:center;padding:14px 20px;font-size:0.95rem;font-weight:600;"></div>
+
+  <div class="container">
+    <a href="dashboard_page.html" class="back-link" id="backLink" style="display:none;">← Back to Dashboard</a>
+
+    <!-- STEP 1: Choose Payment Method -->
+    <div class="payment-methods">
+      <h3>Step 1 — Choose Payment Method</h3>
+      <p class="sub-label">Select how you want to pay before choosing a plan.</p>
+      <div class="payment-grid">
+        <div class="payment-option" onclick="selectPaymentMethod('paypal', this)">
+          <div><strong>PayPal</strong></div>
+          <small>Pay with your PayPal account</small>
+        </div>
+        <div class="payment-option" onclick="selectPaymentMethod('card', this)">
+          <div><strong>Debit / Credit Card</strong></div>
+          <small>Processed securely via PayPal</small>
+        </div>
+        <div class="payment-option" id="manualPaymentOption" style="display:none;" onclick="selectPaymentMethod('manual', this)">
+          <div><strong>Manual Payment</strong></div>
+          <small>Admin approval required</small>
+        </div>
+      </div>
+    </div>
+
+    <p class="select-method-hint" id="methodHint">👆 Select a payment method above, then choose your plan below.</p>
+
+    <!-- STEP 2: Choose Plan -->
+    <div class="pricing-grid">
+
+      <!-- Weekly Plan -->
+      <div class="pricing-card">
+        <div class="plan-name">Weekly</div>
+        <div class="plan-price">$3.50</div>
+        <div class="plan-period">Per week</div>
+        <ul class="plan-features">
+          <li><span class="feature-ok">✓</span> Everything in Basic</li>
+          <li><span class="feature-ok">✓</span> Unlimited messaging</li>
+          <li><span class="feature-ok">✓</span> Priority support</li>
+          <li><span class="feature-ok">✓</span> Update profile media</li>
+        </ul>
+        <button class="subscribe-btn" onclick="selectPlan('weekly', 3.50)">Subscribe</button>
+      </div>
+
+      <!-- Monthly Plan -->
+      <div class="pricing-card popular">
+        <div class="popular-badge">Most Popular</div>
+        <div class="plan-name">Monthly</div>
+        <div class="plan-price">$11</div>
+        <div class="plan-period">Per month</div>
+        <ul class="plan-features">
+          <li><span class="feature-ok">✓</span> Everything in Weekly</li>
+          <li><span class="feature-ok">✓</span> Advanced candidate/job filters</li>
+          <li><span class="feature-ok">✓</span> Boosted profile visibility</li>
+          <li><span class="feature-ok">✓</span> No ads</li>
+        </ul>
+        <button class="subscribe-btn" onclick="selectPlan('monthly', 11)">Subscribe</button>
+      </div>
+
+      <!-- Yearly Plan -->
+      <div class="pricing-card">
+        <div class="plan-name">Yearly</div>
+        <div class="plan-price">$120</div>
+        <div class="plan-period">Per year · save $12</div>
+        <ul class="plan-features">
+          <li><span class="feature-ok">✓</span> Everything in Monthly</li>
+          <li><span class="feature-ok">✓</span> Early access to new features</li>
+          <li><span class="feature-ok">✓</span> Dedicated account support</li>
+          <li><span class="feature-ok">✓</span> Best value</li>
+        </ul>
+        <button class="subscribe-btn" onclick="selectPlan('yearly', 120)">Subscribe</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Payment</h3>
+        <button class="close-modal" onclick="closePaymentModal()">×</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="subscriptions.js"></script>
+</body>
+</html>

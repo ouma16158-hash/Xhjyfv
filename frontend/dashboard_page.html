@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onraiser Dashboard</title>
+  <link rel="stylesheet" href="dashboard_style.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <div class="profile-section">
+          <div class="profile-icon">
+            <img id="sidebarProfilePhoto" src="https://via.placeholder.com/100" alt="Profile">
+          </div>
+          <div class="profile-name" id="sidebarUserName"></div>
+          <div id="sidebarRoleBadge" style="font-size:0.75rem;background:#e8f8f5;color:#00b894;padding:3px 10px;border-radius:10px;margin-top:4px;display:inline-block;"></div>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#" class="nav-item active">
+          <span class="nav-text">Dashboard</span>
+        </a>
+        <a href="charts.html" class="nav-item" id="chatNavItem" style="justify-content:space-between;">
+          <span class="nav-text">Chat</span>
+          <span id="chatNavBadge" style="display:none;background:#e53935;color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;align-items:center;justify-content:center;padding:0 5px;line-height:18px;text-align:center;"></span>
+        </a>
+        <a href="adjust-preferences.html" class="nav-item">
+          <span class="nav-text">Preferences</span>
+        </a>
+        <a href="subscriptions.html" class="nav-item">
+          <span class="nav-text">Subscriptions</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="contact-info">
+          <p class="support-email">onraiser3889@gmail.com</p>
+        </div>
+        <button id="deleteAccountBtn" onclick="confirmDeleteAccount()" style="margin:10px 16px 14px;width:calc(100% - 32px);padding:9px 0;background:rgba(220,38,38,0.15);color:#ff6b6b;border:1px solid rgba(220,38,38,0.3);border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:background 0.2s;">
+          Delete My Account
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Header -->
+      <header class="header">
+        <div class="menu-icon" id="menuToggle">☰</div>
+        <h1 class="site-title">Onraiser</h1>
+        <div class="header-actions">
+          <!-- Employer-only: Add a Job button -->
+          <a href="post-job.html" id="addJobBtn" style="display:none;background:linear-gradient(135deg,#007bff,#00b894);color:white;font-weight:600;padding:5px 12px;border-radius:5px;">+ Add a Job</a>
+          <!-- Chat notification shortcut -->
+          <a href="charts.html" id="headerChatBtn" title="Messages" style="position:relative;background:#e8f4ff;color:#007bff;padding:4px 10px;border-radius:6px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px;">
+            💬
+            <span id="headerChatCount" style="display:none;background:#e53935;color:#fff;font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 4px;line-height:16px;text-align:center;"></span>
+          </a>
+          <a href="#" id="logoutBtn">Log out</a>
+          <a href="my-profile.html" class="settings-icon" title="My Profile" style="text-decoration:none;">⚙️</a>
+        </div>
+      </header>
+
+      <!-- Filter Buttons - seeker view (default) -->
+      <div class="filters" id="seekerFilters">
+        <button class="active" data-section="matches">Companies</button>
+        <button data-section="applied">Applied</button>
+      </div>
+
+      <!-- Company search bar - seeker view (overrides matching rules) -->
+      <div id="companySearchBar" style="display:none;margin-bottom:10px;">
+        <div style="position:relative;display:flex;align-items:center;background:white;border:1px solid #d8e0ea;border-radius:8px;padding:6px 10px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+          <span style="font-size:15px;color:#888;margin-right:6px;">&#128269;</span>
+          <input id="companySearchInput" type="search" placeholder="Search companies by name…"
+                 style="flex:1;border:none;outline:none;padding:7px 4px;font-size:14px;background:transparent;" />
+          <button id="clearCompanySearch" type="button" title="Clear search"
+                  style="display:none;background:#f1f3f5;border:none;border-radius:50%;width:24px;height:24px;font-size:13px;line-height:1;cursor:pointer;color:#555;">✕</button>
+        </div>
+        <p id="searchStatus" style="margin:6px 4px 0;font-size:12px;color:#777;display:none;"></p>
+      </div>
+
+      <!-- Employer top bar: My Jobs button + selected job description -->
+      <div id="employerJobBar" style="display:none; margin-bottom:10px;">
+        <div style="display:flex; align-items:center; flex-wrap:wrap; gap:8px;">
+          <button id="myJobsBtn" onclick="toggleJobsPanel()" style="
+            background:linear-gradient(135deg,#007bff,#00b894);
+            color:white; border:none; padding:7px 16px;
+            border-radius:6px; font-size:13px; font-weight:600; cursor:pointer;">
+            &#128188; My Jobs
+          </button>
+          <span id="selectedJobLabel" style="font-size:13px; color:#555; font-style:italic;"></span>
+          <button id="clearJobFilterBtn" onclick="clearJobFilter()" style="display:none;
+            background:#e8f4ff; color:#007bff; border:1px solid #007bff;
+            padding:4px 10px; border-radius:5px; font-size:12px; cursor:pointer;">
+            ✕ Show All
+          </button>
+        </div>
+
+        <!-- My Jobs Panel (hidden by default) -->
+        <div id="jobsPanel" style="display:none; margin-top:10px; background:white;
+          border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.1); padding:14px;
+          max-height:300px; overflow-y:auto;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-size:14px; font-weight:700; color:#007bff;">Posted Positions</span>
+            <button onclick="closeJobsPanel()" style="background:none; border:none; font-size:18px; cursor:pointer; color:#888;">✕</button>
+          </div>
+          <div id="jobsPanelList">
+            <p style="color:#999; font-size:13px; text-align:center; padding:10px;">Loading...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Buttons - employer view -->
+      <div class="filters" id="employerFilters" style="display:none;">
+        <button class="active" data-section="applications">Applications</button>
+        <button data-section="shortlisted_by_me">Shortlisted</button>
+        <button data-section="chat_enabled">Allowed to Chat</button>
+      </div>
+
+      <!-- Seeker: new chat activation banner (hidden until JS shows it) -->
+      <div id="chatActivationBanner" style="display:none;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+        <div style="font-weight:600;font-size:13px;color:#2e7d32;margin-bottom:6px;">A company has activated chat with you!</div>
+        <div id="chatActivationList" style="font-size:12px;color:#388e3c;margin-bottom:8px;"></div>
+        <a href="charts.html" class="activation-view-btn" style="display:inline-block;background:#2e7d32;color:white;text-decoration:none;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;">Open Chat →</a>
+        <button class="activation-dismiss-btn" style="margin-left:8px;background:none;border:none;color:#888;font-size:12px;cursor:pointer;">Dismiss</button>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div id="loadingSpinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+      </div>
+
+      <!-- Profiles List -->
+      <div class="profiles-list" id="user-container"></div>
+    </main>
+  </div>
+
+  <!-- Floating Profile Photo -->
+  <div id="floatingProfilePhoto" class="floating-profile-photo" style="display:none;">
+    <div style="position:relative;background:white;border-radius:20px;padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:16px;max-width:340px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,0.4);">
+      <button id="closeProfileBtn" style="position:absolute;top:12px;right:14px;background:rgba(0,0,0,0.08);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;color:#555;display:flex;align-items:center;justify-content:center;font-weight:700;">✕</button>
+      <img id="floatingProfilePic" src="" alt="Profile" style="width:170px;height:170px;border-radius:50%;object-fit:cover;border:4px solid #e8f4ff;box-shadow:0 4px 20px rgba(0,123,255,0.2);" />
+      <div id="floatingProfileName" style="font-size:17px;font-weight:700;color:#222;text-align:center;"></div>
+      <div id="floatingProfileRole" style="font-size:13px;color:#00b894;font-weight:600;background:#e8fff5;padding:3px 12px;border-radius:10px;"></div>
+      <button id="viewProfileBtn" style="margin-top:4px;padding:11px 32px;background:linear-gradient(135deg,#007bff,#00b894);color:white;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;width:100%;">⚙️ My Profile</button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="dashboard_script.js"></script>
+
+  <script>
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.removeItem('token');
+      localStorage.removeItem('email');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('dismissedActivations');
+      window.location.href = 'login.html';
+    });
+
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('sidebar-visible');
+      if (window.innerWidth <= 768) {
+        mainContent.style.marginLeft = sidebar.classList.contains('sidebar-visible') ? '25vw' : '0';
+      } else {
+        mainContent.style.marginLeft = sidebar.classList.contains('sidebar-visible') ? '220px' : '0';
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth <= 768) {
+        mainContent.style.marginLeft = sidebar.classList.contains('sidebar-visible') ? '25vw' : '0';
+      } else {
+        mainContent.style.marginLeft = sidebar.classList.contains('sidebar-visible') ? '220px' : '0';
+      }
+    });
+  </script>
+</body>
+</html>

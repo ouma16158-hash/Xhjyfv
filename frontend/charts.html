@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat – Onraiser</title>
+  <link rel="stylesheet" href="globals.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #f4f6f9;
+      min-height: 100vh;
+      color: #1a1a2e;
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      background: linear-gradient(135deg, #007bff 0%, #00b894 100%);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 20px;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .topbar a.back {
+      text-decoration: none;
+      color: rgba(255,255,255,0.9);
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .topbar a.back:hover { background: rgba(255,255,255,0.15); }
+
+    .topbar-brand {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+
+    .topbar-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      margin-top: 1px;
+    }
+
+    .topbar-titles {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar .badge-total {
+      margin-left: auto;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    /* ── Page wrapper ── */
+    .page {
+      max-width: 720px;
+      margin: 28px auto;
+      padding: 0 16px;
+    }
+
+    /* ── Section heading ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #8a9ab0;
+      margin-bottom: 10px;
+      padding-left: 4px;
+    }
+
+    /* ── Conversation list ── */
+    .conv-list {
+      background: #fff;
+      border: 1px solid #e2e6ea;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .conv-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: background 0.12s;
+      border-bottom: 1px solid #f0f2f5;
+      text-decoration: none;
+      color: inherit;
+    }
+    .conv-item:last-child { border-bottom: none; }
+    .conv-item:hover { background: #f7f9fc; }
+    .conv-item.unread { background: #f0f5ff; }
+    .conv-item.unread:hover { background: #e8effd; }
+
+    .conv-avatar {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .conv-avatar img {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #e2e6ea;
+      display: block;
+    }
+
+    .conv-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .conv-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a2e;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+    .conv-preview {
+      font-size: 13px;
+      color: #6b7a8d;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .conv-item.unread .conv-preview {
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
+    .conv-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    .conv-time {
+      font-size: 11px;
+      color: #9eaab8;
+    }
+    .conv-unread-count {
+      background: #1a73e8;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px;
+    }
+
+    /* ── Empty / loading states ── */
+    .state-box {
+      background: #fff;
+      border: 1px solid #e2e6ea;
+      border-radius: 10px;
+      padding: 56px 24px;
+      text-align: center;
+    }
+    .state-box .icon {
+      font-size: 40px;
+      margin-bottom: 14px;
+      opacity: 0.35;
+    }
+    .state-box h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #3a4a5c;
+      margin-bottom: 6px;
+    }
+    .state-box p {
+      font-size: 13px;
+      color: #8a9ab0;
+      line-height: 1.6;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #e2e6ea;
+      border-top-color: #1a73e8;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a href="dashboard_page.html" class="back">← Back</a>
+    <div class="topbar-titles">
+      <span class="topbar-brand">Onraiser</span>
+      <span class="topbar-sub">Chat</span>
+    </div>
+    <span id="unreadTotalBadge" class="badge-total" style="display:none;"></span>
+  </div>
+
+  <div class="page">
+    <div class="section-label">Conversations</div>
+
+    <div id="loadingBox" class="state-box">
+      <div class="spinner"></div>
+      <p>Loading your conversations…</p>
+    </div>
+
+    <div id="convList" class="conv-list" style="display:none;"></div>
+
+    <div id="emptyBox" class="state-box" style="display:none;">
+      <div class="icon">💬</div>
+      <h3>No conversations yet</h3>
+      <p>Once an employer activates chat with you (or you activate it<br>with a candidate), your conversations will appear here.</p>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="charts.js"></script>
+</body>
+</html>

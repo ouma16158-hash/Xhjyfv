@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adjust Preferences - Onraiser</title>
+  <link rel="stylesheet" href="match-form.css">
+  <style>
+    /* ── Override match-form.css with post-job design ── */
+    * { box-sizing: border-box; }
+    body { background: #f4f7fb; }
+
+    .tk-header {
+      background: linear-gradient(135deg, #007bff 0%, #00b894 100%);
+      color: white;
+      text-align: left;
+      padding: 14px 20px;
+      font-size: 20px;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .tk-header a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .tk-container {
+      max-width: 680px;
+      margin: 28px auto;
+      padding: 0 16px 40px;
+      background: transparent;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .tk-form {
+      background: white;
+      border-radius: 10px;
+      padding: 28px 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .tk-form h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #007bff;
+      margin-bottom: 8px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e8f4ff;
+    }
+
+    .tk-form label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      margin-top: 14px;
+      margin-bottom: 5px;
+    }
+
+    .tk-form input,
+    .tk-form select,
+    .tk-form textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #d0dce8;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #333;
+      background: #fafcff;
+      transition: border-color 0.2s;
+      outline: none;
+      margin-top: 0;
+    }
+    .tk-form input:focus,
+    .tk-form select:focus,
+    .tk-form textarea:focus { border-color: #007bff; background: #fff; }
+
+    .tk-form button {
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .tk-form button:hover { opacity: 0.9; }
+
+    .tk-note {
+      background: #e8f4ff;
+      border-left: 3px solid #007bff;
+      color: #1a4f8a;
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 13px;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #007bff;
+      margin: 24px 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e8f4ff;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .actions button { flex: 1; }
+
+    .back-btn {
+      background: #f1f3f5;
+      color: #555;
+      border: 1.5px solid #d0dce8;
+    }
+    .back-btn:hover { background: #e2e6ea; opacity: 1; }
+
+    #submitBtn {
+      background: linear-gradient(135deg, #007bff 0%, #00b894 100%);
+      color: white;
+    }
+
+    .tk-spinner {
+      display: none;
+      width: 32px;
+      height: 32px;
+      border: 3px solid #cce5ff;
+      border-top-color: #007bff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 14px auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .spinner-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(255,255,255,0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .spinner-overlay .tk-spinner { display: block; }
+
+    @media (max-width: 600px) {
+      .tk-container { margin: 14px auto; padding: 0 10px 24px; }
+      .tk-form { padding: 18px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="spinner-overlay" id="spinnerOverlay">
+    <div class="tk-spinner"></div>
+  </div>
+
+  <header class="tk-header">
+    <a href="dashboard_page.html">&#8592;</a>
+    <span>Adjust Preferences</span>
+  </header>
+
+  <main class="tk-container">
+    <form id="adjustPreferencesForm" class="tk-form">
+      <h2 id="pageTitle">Adjust Preferences</h2>
+      <p class="tk-note" id="pageNote">Update the preferences used for dashboard matching.</p>
+
+      <div id="seekerPreferenceFields">
+        <div class="section-title">Industry Specialisation</div>
+        <label>Main Industry Specialisation</label>
+        <select name="target_industry" id="targetIndustrySelect">
+          <option value="">Any Main Industry</option>
+          <option value="Engineering & Tech">Engineering & Tech</option>
+          <option value="Business & Admin">Business & Admin</option>
+          <option value="Health & Sciences">Health & Sciences</option>
+          <option value="Arts & Design">Arts & Design</option>
+          <option value="Humanities/Social">Humanities/Social</option>
+        </select>
+
+        <label>Sub Main Industry Specialisation</label>
+        <select name="pref_country_of_residence" id="targetSubIndustrySelect">
+          <option value="">Any Sub Industry</option>
+        </select>
+
+        <div class="section-title">Salary & Location</div>
+        <label>Preferred Salary (monthly)</label>
+        <input type="number" name="pref_height" id="pref_height" min="0" placeholder="e.g. 50000">
+
+        <label>Preferred Location</label>
+        <input type="text" name="pref_location" id="pref_location" placeholder="e.g. Nairobi, Kenya">
+      </div>
+
+      <div id="employerPreferenceFields" style="display:none;">
+        <div class="section-title">First Job / Position Preference</div>
+        <label>Required Main Area</label>
+        <select name="pref_country_of_birth" id="reqMajor">
+          <option value="">Any Main Area</option>
+          <option value="Engineering & Tech">Engineering & Tech</option>
+          <option value="Business & Admin">Business & Admin</option>
+          <option value="Health & Sciences">Health & Sciences</option>
+          <option value="Arts & Design">Arts & Design</option>
+          <option value="Humanities/Social">Humanities/Social</option>
+        </select>
+
+        <label>Required Sub Area</label>
+        <select name="pref_country_of_residence" id="reqSubMajor">
+          <option value="">Any Sub Area</option>
+        </select>
+
+        <label>Minimum Academic Qualification</label>
+        <select name="pref_body_type" id="pref_body_type">
+          <option value="">Any Qualification</option>
+          <option value="Certificate">Certificate</option>
+          <option value="Diploma">Diploma</option>
+          <option value="Bachelor's">Bachelor's</option>
+          <option value="Master's">Master's</option>
+          <option value="PhD">PhD</option>
+        </select>
+      </div>
+
+      <div class="tk-spinner" id="spinner"></div>
+      <div class="actions">
+        <button type="button" class="back-btn" onclick="window.location.href='dashboard_page.html'">Back to Dashboard</button>
+        <button type="submit" id="submitBtn">Update Preferences</button>
+      </div>
+    </form>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="auth-guard.js"></script>
+  <script src="adjust-preferences.js"></script>
+</body>
+</html>

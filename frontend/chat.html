@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Chat – Onraiser</title>
+  <link rel="stylesheet" href="globals.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      /* Mobile Safari fix: use fill-available so keyboard doesn't push layout */
+      height: -webkit-fill-available;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      flex-direction: column;
+      /* Lock body to viewport - no scroll on body itself */
+      overflow: hidden;
+      position: fixed;
+      width: 100%;
+      top: 0; left: 0; right: 0; bottom: 0;
+    }
+
+    /* ── Top bar ── */
+    .chat-topbar {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e6ea;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      height: 56px;
+      flex-shrink: 0;
+      z-index: 10;
+      /* safe area for notch phones */
+      padding-top: env(safe-area-inset-top);
+    }
+
+    .back-btn {
+      text-decoration: none;
+      color: #555;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .back-btn:hover { background: #f0f2f5; }
+
+    .chat-peer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .peer-avatar img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #e2e6ea;
+      cursor: pointer;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .peer-info { min-width: 0; }
+    .peer-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a1a2e;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .peer-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: #8a9ab0;
+      margin-top: 1px;
+    }
+    .online-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #bdc3cc;
+      flex-shrink: 0;
+      transition: background 0.4s;
+    }
+    .online-dot.online  { background: #27ae60; }
+    .online-dot.offline { background: #bdc3cc; }
+
+    /* ── Main scroll area ── */
+    .chat-body {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      /* allow scroll but hide on body */
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .date-sep {
+      text-align: center;
+      font-size: 11px;
+      color: #9eaab8;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      margin: 10px 0 4px;
+    }
+
+    .message {
+      display: flex;
+      flex-direction: column;
+      max-width: 72%;
+    }
+    .message.sent     { align-self: flex-end; align-items: flex-end; }
+    .message.received { align-self: flex-start; align-items: flex-start; }
+
+    .message-bubble {
+      padding: 9px 13px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+    .message.sent .message-bubble {
+      background: #1a73e8;
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .message.received .message-bubble {
+      background: #ffffff;
+      color: #1a1a2e;
+      border: 1px solid #e2e6ea;
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-time {
+      font-size: 10px;
+      color: #9eaab8;
+      margin-top: 3px;
+      padding: 0 2px;
+    }
+
+    .no-messages {
+      margin: auto;
+      text-align: center;
+      color: #8a9ab0;
+      font-size: 14px;
+    }
+
+    /* ── Input bar — always pinned above keyboard ── */
+    .chat-inputbar {
+      background: #ffffff;
+      border-top: 1px solid #e2e6ea;
+      padding: 10px 14px;
+      /* safe area inset for home-bar phones */
+      padding-bottom: calc(10px + env(safe-area-inset-bottom));
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .chat-input {
+      flex: 1;
+      border: 1px solid #d0d7e2;
+      border-radius: 20px;
+      padding: 9px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: none;
+      min-height: 40px;
+      max-height: 100px;
+      overflow-y: auto;
+      outline: none;
+      line-height: 1.4;
+      color: #1a1a2e;
+      transition: border-color 0.2s;
+      -webkit-overflow-scrolling: touch;
+    }
+    .chat-input:focus { border-color: #1a73e8; }
+    .chat-input::placeholder { color: #aab4bf; }
+
+    .send-btn {
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.2s, opacity 0.2s;
+    }
+    .send-btn:hover   { background: #1558b0; }
+    .send-btn:active  { background: #0d47a1; }
+    .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── Premium notice ── */
+    .premium-notice {
+      margin: 20px 16px;
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 10px;
+      padding: 24px 20px;
+      text-align: center;
+    }
+    .premium-notice h3 { font-size: 15px; color: #795548; margin-bottom: 8px; }
+    .premium-notice p  { font-size: 13px; color: #8d6e63; margin-bottom: 16px; }
+    .upgrade-btn {
+      display: inline-block;
+      background: #1a73e8;
+      color: #fff;
+      text-decoration: none;
+      padding: 9px 20px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* ── Photo lightbox ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.82);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 88vw;
+      max-height: 88vh;
+      border-radius: 10px;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 16px; right: 18px;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 34px; height: 34px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="chat-topbar">
+    <a href="charts.html" class="back-btn">← Chat</a>
+    <div class="chat-peer">
+      <div class="peer-avatar">
+        <img id="chatAvatar" src="https://via.placeholder.com/36" alt="User">
+      </div>
+      <div class="peer-info">
+        <div id="chatUserName" class="peer-name">Loading…</div>
+        <div class="peer-status">
+          <span id="onlineDot" class="online-dot"></span>
+          <span id="onlineLabel">Checking…</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Premium gate -->
+  <div id="premiumNotice" class="premium-notice" style="display:none;">
+    <h3>Premium Feature</h3>
+    <p>Messaging is available for Premium users only.</p>
+    <a href="subscriptions.html" class="upgrade-btn">Upgrade to Premium</a>
+  </div>
+
+  <!-- Messages scroll area -->
+  <div id="chatMessages" class="chat-body">
+    <p class="no-messages">Start the conversation…</p>
+  </div>
+
+  <!-- Input always visible at bottom -->
+  <div id="chatInputContainer" class="chat-inputbar">
+    <textarea id="messageInput" class="chat-input" placeholder="Type a message…" rows="1"></textarea>
+    <button id="sendBtn" class="send-btn" title="Send">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Photo lightbox -->
+  <div id="lightbox" class="lightbox">
+    <button class="lightbox-close" id="closeLightbox">✕</button>
+    <img id="lightboxImg" src="" alt="Profile">
+  </div>
+
+  <script src="config.js"></script>
+  <script src="chat.js"></script>
+</body>
+</html>

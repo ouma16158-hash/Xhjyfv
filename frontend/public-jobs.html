@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onraiser – Browse Open Jobs</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #222; }
+    .pj-header {
+      background: linear-gradient(135deg, #007bff, #00b894);
+      color: white;
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .pj-header h1 { margin: 0; font-size: 20px; font-weight: 700; }
+    .pj-header .auth-links a {
+      color: white;
+      background: rgba(255,255,255,0.18);
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+    .pj-header .auth-links a.primary { background: white; color: #007bff; }
+
+    .pj-container { max-width: 1100px; margin: 22px auto; padding: 0 16px 40px; }
+    .pj-intro { background: white; border-radius: 10px; padding: 18px 20px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); margin-bottom: 18px; }
+    .pj-intro h2 { margin: 0 0 6px; font-size: 18px; }
+    .pj-intro p { margin: 0; color: #555; font-size: 14px; }
+
+    .pj-search { display: flex; align-items: center; background: white; border: 1px solid #d8e0ea; border-radius: 8px; padding: 6px 10px; margin: 0 0 18px; }
+    .pj-search input { flex: 1; border: none; outline: none; padding: 8px 6px; font-size: 14px; background: transparent; }
+
+    .company-block {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+      margin-bottom: 22px;
+      overflow: hidden;
+    }
+    .company-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      border-bottom: 1px solid #eef1f5;
+    }
+    .company-head img { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; background: #eee; }
+    .company-head h2 { margin: 0 0 2px; font-size: 17px; }
+    .company-head p { margin: 1px 0; color: #555; font-size: 13px; }
+    .company-bio { padding: 0 16px 4px; color: #444; font-size: 13px; margin: 0; }
+
+    .jobs-grid { padding: 12px 16px 16px; display: grid; gap: 12px; grid-template-columns: 1fr; }
+    @media (min-width: 720px) { .jobs-grid { grid-template-columns: 1fr 1fr; } }
+
+    .job-card { border: 1px solid #eef1f5; border-left: 4px solid #007bff; border-radius: 8px; padding: 12px 14px; background: #fbfdff; }
+    .job-card h3 { margin: 0 0 6px; font-size: 15px; color: #007bff; }
+    .job-meta { display: flex; flex-wrap: wrap; gap: 4px 6px; margin-bottom: 8px; }
+    .job-meta span { font-size: 11px; padding: 2px 8px; border-radius: 12px; background: #e8f4ff; color: #007bff; }
+    .job-meta .mode { background: #e8fff5; color: #00b894; }
+    .job-meta .salary { background: #fff7e6; color: #b07a00; }
+    .job-meta .posted { background: #f1f3f5; color: #555; }
+    .job-meta .deadline-soon { background: #fff3cd; color: #8a6d3b; }
+    .job-meta .deadline-ok { background: #f0f8ff; color: #0056b3; }
+
+    .job-card p { font-size: 12.5px; color: #444; margin: 4px 0; }
+    .apply-btn {
+      display: inline-block;
+      margin-top: 8px;
+      background: linear-gradient(135deg, #007bff, #00b894);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .empty { text-align: center; color: #888; padding: 40px 16px; background: white; border-radius: 10px; }
+    .loading { text-align: center; color: #666; padding: 30px; }
+
+    @media (max-width: 600px) {
+      .pj-header { padding: 12px 14px; }
+      .pj-header h1 { font-size: 17px; }
+      .company-head { padding: 12px; gap: 10px; }
+      .company-head img { width: 52px; height: 52px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="pj-header">
+    <h1>Onraiser – Open Positions</h1>
+    <div class="auth-links">
+      <a href="login.html">Sign In</a>
+      <a href="register.html" class="primary">Sign Up</a>
+    </div>
+  </header>
+
+  <main class="pj-container">
+    <div class="pj-intro">
+      <h2>Browse every open position</h2>
+      <p>You can explore all jobs without an account. To apply, you'll be asked to sign in or create one.</p>
+    </div>
+
+    <div class="pj-search">
+      <span style="color:#888;margin-right:6px;">&#128269;</span>
+      <input id="pjSearch" type="search" placeholder="Filter by company name, role, location, industry…" />
+    </div>
+
+    <div id="pjList" class="loading">Loading open positions…</div>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="public-jobs.js"></script>
+</body>
+</html>

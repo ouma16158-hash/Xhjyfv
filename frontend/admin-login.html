@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onraiser | Admin Login</title>
+  <link rel="stylesheet" href="admin-login.css" />
+</head>
+<body>
+  <div class="admin-login-container">
+    <h1 class="admin-title">Admin Login</h1>
+    <form id="adminLoginForm" class="admin-form">
+      <input type="email" name="email" placeholder="Admin Email" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+      <p id="adminLoginError" class="admin-error" style="display:none;"></p>
+    </form>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="admin-login.js"></script>
+</body>
+</html>

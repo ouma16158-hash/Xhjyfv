@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Premium Manager | Admin Dashboard</title>
+  <link rel="stylesheet" href="admin-premium-manager.css" />
+</head>
+<body>
+  <div class="premium-manager-container">
+    <h1 class="header">Premium Access Manager</h1>
+
+    <div class="user-info">
+      <h2 id="userName">User Name</h2>
+      <p id="userEmail">user@example.com</p>
+    </div>
+
+    <div class="premium-actions">
+      <div class="action-section">
+        <h3>Grant Premium Access</h3>
+        <div class="duration-options">
+          <button class="duration-btn" onclick="grantPremium(7)">1 Week</button>
+          <button class="duration-btn" onclick="grantPremium(30)">1 Month</button>
+          <button class="duration-btn" onclick="grantPremium(365)">1 Year</button>
+        </div>
+
+        <div class="custom-duration">
+          <input type="number" id="customDays" placeholder="Custom days" min="1" max="3650">
+          <button class="custom-btn" onclick="grantCustomPremium()">Grant Custom</button>
+        </div>
+      </div>
+
+      <div class="action-section">
+        <h3>Remove Premium Access</h3>
+        <button class="remove-btn" onclick="removePremium()">Remove Premium</button>
+      </div>
+    </div>
+
+    <div class="status-message" id="statusMessage"></div>
+
+    <div class="navigation">
+      <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="admin-premium-manager.js"></script>
+</body>
+</html>

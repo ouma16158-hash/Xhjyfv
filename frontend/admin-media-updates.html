@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Media Updates</title>
+    <link rel="stylesheet" href="admin-media-updates.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header>
+            <h1>Media Updates Review</h1>
+            <nav>
+                <a href="admin-dashboard.html" class="nav-item">Dashboard</a>
+                <a href="admin-media-updates.html" class="nav-item active">Media Updates</a>
+                <a href="admin-premium-approvals.html" class="nav-item">Premium Approvals</a>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </nav>
+        </header>
+
+        <div class="content">
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Pending Reviews</h3>
+                    <span id="pendingCount">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Approved Today</h3>
+                    <span id="approvedCount">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Rejected Today</h3>
+                    <span id="rejectedCount">0</span>
+                </div>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" data-status="pending">Pending</button>
+                <button class="filter-btn" data-status="approved">Approved</button>
+                <button class="filter-btn" data-status="rejected">Rejected</button>
+            </div>
+
+            <div id="mediaUpdatesContainer" class="updates-container">
+                <!-- Media updates will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="admin-media-updates.js"></script>
+</body>
+</html>

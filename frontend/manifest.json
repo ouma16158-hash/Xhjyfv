@@ -1,0 +1,28 @@
+{
+  "id": "com.onraiser.app",
+  "name": "Onraiser – Job-Seeking Platform",
+  "short_name": "Onraiser",
+  "description": "Onraiser connects job seekers with the right employers through smart matching, video introductions, and powerful experience filters. Find your perfect career match today.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#00b894",
+  "theme_color": "#00b894",
+  "icons": [
+    {
+      "src": "/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "categories": ["business", "productivity"],
+  "lang": "en"
+}

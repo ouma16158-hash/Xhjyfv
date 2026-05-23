@@ -1,0 +1,53 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f4f4;
+}
+
+.admin-login-container {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 30px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  border-radius: 8px;
+}
+
+.admin-title {
+  text-align: center;
+  color: #2ecc71;
+  margin-bottom: 20px;
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.admin-form input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.admin-form button {
+  padding: 12px;
+  background-color: #3498db;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.admin-form button:hover {
+  background-color: #2980b9;
+}
+
+.admin-error {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}

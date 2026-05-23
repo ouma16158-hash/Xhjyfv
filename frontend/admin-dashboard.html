@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onraiser | Admin Dashboard</title>
+  <link rel="stylesheet" href="admin-dashboard.css" />
+</head>
+<body>
+  <div class="admin-container">
+
+    <!-- ── Sidebar ── -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-name">Onraiser</div>
+        <div class="brand-sub">Admin Panel</div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="admin-dashboard.html" class="nav-item active">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a href="admin-media-updates.html" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          Media Updates
+          <span class="notification-badge" id="mediaUpdatesBadge" style="display:none;">0</span>
+        </a>
+        <a href="admin-premium-approvals.html" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Premium Approvals
+          <span class="notification-badge" id="premiumApprovalsBadge" style="display:none;">0</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button onclick="logout()" class="logout-btn">Sign Out</button>
+      </div>
+    </aside>
+
+    <!-- ── Main ── -->
+    <div class="admin-main">
+      <!-- Top bar -->
+      <div class="admin-topbar">
+        <div class="topbar-title">Dashboard Overview</div>
+        <div class="topbar-right" style="font-size:0.82rem;color:#64748b;" id="adminEmailLabel"></div>
+      </div>
+
+      <div class="admin-content">
+
+        <!-- Stats -->
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <h3>Total Users</h3>
+            <span id="totalUsers">—</span>
+          </div>
+          <div class="stat-card">
+            <h3>Pending Media</h3>
+            <span id="pendingMedia">—</span>
+          </div>
+          <div class="stat-card" style="cursor:pointer;" onclick="window.location.href='admin-premium-approvals.html'" title="Click to review premium requests">
+            <h3>Pending Premium</h3>
+            <span id="pendingPremium">—</span>
+            <div style="font-size:0.75rem;color:#00b894;margin-top:6px;font-weight:600;">Review Requests →</div>
+          </div>
+          <div class="stat-card">
+            <h3>Active Premium</h3>
+            <span id="activePremium">—</span>
+          </div>
+        </div>
+
+        <!-- ── Landing Page Photos (TOP) ── -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h2>Landing Page Background Photos</h2>
+              <div class="section-sub">These photos rotate as the hero background on the public landing page.</div>
+            </div>
+          </div>
+          <div class="landing-upload-row">
+            <input type="file" id="landingImageFile" accept="image/*">
+            <button class="landing-upload-btn" onclick="uploadLandingImage()">Upload Photo</button>
+          </div>
+          <div class="landing-img-grid" id="landingImgGrid">
+            <p class="no-photos-msg">Loading photos…</p>
+          </div>
+        </div>
+
+        <!-- ── Users ── -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h2>All Users</h2>
+              <div class="section-sub">Manage seekers and employers. Use the search to find a specific account.</div>
+            </div>
+          </div>
+
+          <!-- Search bar -->
+          <div class="search-row">
+            <div class="search-input-wrap">
+              <span class="search-icon">&#128269;</span>
+              <input
+                type="text"
+                id="userSearchInput"
+                placeholder="Search by email or name…"
+                oninput="filterUsers(this.value)"
+              >
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Status</th>
+                  <th>Subscription</th>
+                  <th>Registered</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="userTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Suspend Modal -->
+  <div class="msg-modal-overlay" id="suspendModal">
+    <div class="msg-modal">
+      <h3 style="color:#dc2626;">Suspend Account</h3>
+      <p class="msg-to" id="suspendUserLabel"></p>
+      <textarea id="suspendReason" placeholder="Reason for suspension (optional — will be shown to user and emailed)…"></textarea>
+      <div class="msg-modal-actions">
+        <button class="msg-send-btn suspend-confirm-btn" style="background:#dc2626;" onclick="confirmSuspend()">Suspend Account</button>
+        <button class="msg-cancel-btn" onclick="closeSuspendModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Send Message Modal -->
+  <div class="msg-modal-overlay" id="msgModal">
+    <div class="msg-modal">
+      <h3>Send Message to User</h3>
+      <p class="msg-to" id="msgRecipient"></p>
+      <textarea id="msgText" placeholder="Type your message here…"></textarea>
+      <div class="msg-modal-actions">
+        <button class="msg-send-btn" onclick="sendUserMessage()">Send</button>
+        <button class="msg-cancel-btn" onclick="closeMsgModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="admin-status-toast" id="adminToast"></div>
+
+  <script src="config.js"></script>
+  <script src="admin-dashboard.js"></script>
+</body>
+</html>

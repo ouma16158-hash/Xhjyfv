@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirm OTP - Onraiser</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .ty-message { margin-top: 1rem; font-size: 0.9rem; color: red; text-align: center; }
+    .ty-success { color: green; }
+    .ty-loading { text-align: center; margin-top: 1rem; font-size: 0.95rem; color: #0984e3; }
+    .ty-resend-btn { margin-top: 1rem; background: none; border: none; color: #0984e3; font-weight: bold; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="ty-register-box">
+    <div class="ty-logo-form">Onraiser</div>
+    <form class="ty-form" id="confirmForm">
+      <label>Enter OTP *</label>
+      <input type="text" id="otp" required />
+      <div class="ty-message" id="otpMsg"></div>
+      <div class="ty-loading" id="otpLoading" style="display: none;">Verifying...</div>
+      <button type="submit" class="ty-submit-btn">Confirm</button>
+    </form>
+    <button class="ty-resend-btn" id="resendBtn">Resend OTP</button>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    const otpMsg = document.getElementById("otpMsg");
+    const otpLoading = document.getElementById("otpLoading");
+    const resendBtn = document.getElementById("resendBtn");
+
+    document.getElementById("confirmForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = localStorage.getItem("email");
+      const password = localStorage.getItem("password");
+      const role = localStorage.getItem("userRole") || "seeker";
+      const otp = document.getElementById("otp").value;
+
+      otpMsg.innerText = "";
+      otpLoading.style.display = "block";
+
+      try {
+        const res = await fetch(`${config.API_BASE_URL}/api/verify-otp`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, otp, password, role })
+        });
+
+        const data = await res.json();
+        otpLoading.style.display = "none";
+
+        if (res.ok) {
+          otpMsg.classList.add("ty-success");
+          otpMsg.innerText = "Account created! Welcome to Onraiser. Redirecting...";
+          document.getElementById("confirmForm").reset();
+          setTimeout(() => { window.location.href = "login.html"; }, 2000);
+        } else {
+          otpMsg.classList.remove("ty-success");
+          otpMsg.innerText = data.error || "Invalid OTP.";
+        }
+      } catch (err) {
+        otpLoading.style.display = "none";
+        otpMsg.innerText = "Network error. Try again.";
+      }
+    });
+
+    resendBtn.addEventListener("click", async () => {
+      const email = localStorage.getItem("email");
+      const password = localStorage.getItem("password");
+      const role = localStorage.getItem("userRole") || "seeker";
+
+      otpMsg.innerText = "";
+      otpLoading.style.display = "block";
+
+      try {
+        const res = await fetch(`${config.API_BASE_URL}/api/send-otp`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, role })
+        });
+
+        const data = await res.json();
+        otpLoading.style.display = "none";
+
+        if (res.ok) {
+          otpMsg.classList.add("ty-success");
+          otpMsg.innerText = "OTP resent successfully.";
+        } else {
+          otpMsg.classList.remove("ty-success");
+          otpMsg.innerText = data.error || "Failed to resend OTP.";
+        }
+      } catch (err) {
+        otpLoading.style.display = "none";
+        otpMsg.innerText = "Resend failed. Try again later.";
+      }
+    });
+  </script>
+</body>
+</html>

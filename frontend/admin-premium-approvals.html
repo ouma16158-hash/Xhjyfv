@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onraiser | Premium Approvals</title>
+  <link rel="stylesheet" href="admin-dashboard.css" />
+  <style>
+    .filter-row { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+    .filter-btn {
+      padding: 8px 24px;
+      border-radius: 20px;
+      border: 2px solid #00b894;
+      background: white;
+      color: #00b894;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { background: #e6faf6; }
+    .filter-btn.active { background: #00b894; color: white; box-shadow: 0 2px 8px rgba(0,184,148,0.3); }
+    #subscriptionsContainer { display:flex; flex-direction:column; gap:0; }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+
+    <!-- ── Sidebar ── -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-name">Onraiser</div>
+        <div class="brand-sub">Admin Panel</div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="admin-dashboard.html" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a href="admin-media-updates.html" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          Media Updates
+        </a>
+        <a href="admin-premium-approvals.html" class="nav-item active">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Premium Approvals
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button onclick="logout()" class="logout-btn">Sign Out</button>
+      </div>
+    </aside>
+
+    <!-- ── Main ── -->
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <div class="topbar-title">Premium Subscription Approvals</div>
+        <div class="topbar-right" style="font-size:0.82rem;color:#64748b;" id="adminEmailLabel"></div>
+      </div>
+
+      <div class="admin-content">
+
+        <!-- Stats -->
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <h3>Pending Reviews</h3>
+            <span id="pendingCount">—</span>
+          </div>
+          <div class="stat-card">
+            <h3>Approved Today</h3>
+            <span id="approvedCount">—</span>
+          </div>
+          <div class="stat-card">
+            <h3>Rejected Today</h3>
+            <span id="rejectedCount">—</span>
+          </div>
+        </div>
+
+        <!-- Requests Card -->
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h2>Subscription Requests</h2>
+              <div class="section-sub">Review and approve or reject user premium payment submissions.</div>
+            </div>
+          </div>
+
+          <!-- Filter buttons -->
+          <div class="filter-row">
+            <button class="filter-btn active" data-status="pending"  onclick="switchFilter('pending')">Pending</button>
+            <button class="filter-btn"        data-status="approved" onclick="switchFilter('approved')">Approved</button>
+            <button class="filter-btn"        data-status="rejected" onclick="switchFilter('rejected')">Rejected</button>
+          </div>
+
+          <div id="subscriptionsContainer">
+            <p style="color:#94a3b8;padding:20px 0;">Loading…</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-status-toast" id="adminToast"></div>
+
+  <script src="config.js"></script>
+  <script src="admin-premium-approvals.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Review | Onraiser</title>
+  <link rel="stylesheet" href="admin-user-view.css" />
+</head>
+<body>
+  <div class="admin-user-container">
+    <h2>Review User</h2>
+
+    <div id="userInfo" class="user-section"></div>
+
+    <div class="status-controls">
+      <textarea id="adminMessage" placeholder="Optional comment..."></textarea>
+      <div class="buttons">
+        <button id="approveBtn">✅ Approve</button>
+        <button id="disapproveBtn">❌ Disapprove</button>
+      </div>
+    </div>
+
+    <p id="updateStatusText" class="status-message"></p>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="admin-user-view.js"></script>
+</body>
+</html>

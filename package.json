@@ -1,0 +1,41 @@
+{
+  "name": "full-stack-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx wrangler dev --port 5000 --assets ./frontend",
+    "deploy": "npx wrangler deploy",
+    "dev:node": "node backend/dev-server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1048.0",
+    "@hono/node-server": "^2.0.3",
+    "@paypal/paypal-server-sdk": "^1.1.0",
+    "@sendgrid/mail": "^8.1.5",
+    "@supabase/supabase-js": "^2.56.1",
+    "aws4fetch": "^1.0.20",
+    "axios": "^1.11.0",
+    "bcrypt": "^6.0.0",
+    "binance": "^3.0.7",
+    "cloudinary": "^2.7.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.6.1",
+    "firebase-admin": "^13.5.0",
+    "hono": "^4.12.22",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^7.0.5",
+    "pg": "^8.16.3",
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0",
+    "winston-loggly-bulk": "^3.3.2"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5",
+    "wrangler": "^4.86.0"
+  }
+}

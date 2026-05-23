@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Suspended — Onraiser</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 48px 40px;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+    }
+    .icon {
+      width: 72px; height: 72px;
+      background: #fef2f2;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 36px;
+    }
+    h1 {
+      font-size: 1.7rem;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      font-size: 0.97rem;
+      color: #64748b;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .reason-box {
+      background: #fff8f8;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 16px 18px;
+      text-align: left;
+      margin-bottom: 28px;
+      display: none;
+    }
+    .reason-box p {
+      font-size: 0.93rem;
+      color: #7f1d1d;
+      line-height: 1.6;
+    }
+    .contact-info {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      font-size: 0.9rem;
+      color: #475569;
+      line-height: 1.7;
+    }
+    .contact-info a {
+      color: #0ea5e9;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .logout-btn {
+      display: inline-block;
+      padding: 12px 32px;
+      background: #dc2626;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .logout-btn:hover { background: #b91c1c; }
+    .brand {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">🚫</div>
+    <h1>Account Suspended</h1>
+    <p class="subtitle">
+      Your Onraiser account has been temporarily suspended by our team.
+      You cannot access the platform while your account is suspended.
+    </p>
+
+    <div class="reason-box" id="reasonBox">
+      <p id="reasonText"></p>
+    </div>
+
+    <div class="contact-info">
+      If you believe this is a mistake or would like to appeal, please contact us:<br>
+      <a href="mailto:onraiser3889@gmail.com">onraiser3889@gmail.com</a>
+    </div>
+
+    <button class="logout-btn" onclick="signOut()">Sign Out</button>
+    <div class="brand">Onraiser &mdash; Job-Seeking Platform</div>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    // Block all navigation attempts — user must stay on this page
+    history.pushState(null, '', window.location.href);
+    window.addEventListener('popstate', () => {
+      history.pushState(null, '', window.location.href);
+    });
+
+    // Verify suspension is real and load reason
+    (async () => {
+      const token = localStorage.getItem('token');
+      if (!token) { window.location.replace('login.html'); return; }
+
+      try {
+        const res = await fetch(`${config.API_BASE_URL}/api/user/status`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        // If account is no longer suspended, redirect to dashboard
+        if (data.status && data.status !== 'suspended') {
+          window.location.replace('login.html');
+          return;
+        }
+
+        // Show reason if provided
+        if (data.adminMessage) {
+          document.getElementById('reasonText').textContent = data.adminMessage;
+          document.getElementById('reasonBox').style.display = 'block';
+        }
+      } catch(e) {
+        console.error('Status check error:', e);
+      }
+    })();
+
+    function signOut() {
+      localStorage.removeItem('token');
+      window.location.replace('login.html');
+    }
+  </script>
+</body>
+</html>

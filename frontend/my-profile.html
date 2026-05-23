@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Onraiser – My Profile</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f4f7fb; min-height: 100vh; }
+
+    .page-header {
+      background: linear-gradient(135deg, #007bff 0%, #00b894 100%);
+      color: white;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .page-header a { color: white; text-decoration: none; font-size: 22px; line-height: 1; }
+    .page-header h1 { font-size: 20px; font-weight: 700; }
+
+    .form-wrapper {
+      max-width: 700px;
+      margin: 28px auto;
+      padding: 0 16px 60px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 26px 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+    .card h2 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #007bff;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e8f4ff;
+    }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #d0dce8;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #333;
+      background: #fafcff;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: #007bff; background: #fff; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+
+    .save-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #007bff 0%, #00b894 100%);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: opacity 0.2s;
+    }
+    .save-btn:hover { opacity: 0.9; }
+    .save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Photo section */
+    .photo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .photo-preview {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #e8f4ff;
+      background: #f0f4fa;
+    }
+    .photo-placeholder {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: #e8f4ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      color: #007bff;
+      border: 3px solid #d0e8ff;
+      flex-shrink: 0;
+    }
+    .upload-btn-label {
+      display: inline-block;
+      padding: 8px 18px;
+      background: #e8f4ff;
+      color: #007bff;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid #c3deff;
+      transition: background 0.2s;
+    }
+    .upload-btn-label:hover { background: #d0e8ff; }
+    .upload-btn-label input { display: none; }
+
+    /* Media items */
+    .media-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+
+    .media-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f7f9fc;
+      border: 1.5px solid #e2eaf4;
+      border-radius: 8px;
+      padding: 10px 12px;
+      flex-wrap: wrap;
+    }
+    .media-item .media-thumb {
+      width: 54px;
+      height: 40px;
+      border-radius: 5px;
+      object-fit: cover;
+      background: #dce8f5;
+      flex-shrink: 0;
+    }
+    .media-item .media-info { flex: 1; min-width: 100px; }
+    .media-item .media-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .media-item .media-type { font-size: 11px; color: #888; }
+    .media-item .media-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+    .btn-view {
+      padding: 5px 12px;
+      background: #e8f4ff;
+      color: #007bff;
+      border: 1px solid #c3deff;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-delete {
+      padding: 5px 10px;
+      background: #fff0f0;
+      color: #e53935;
+      border: 1px solid #ffd0d0;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-delete:hover { background: #ffe0e0; }
+
+    /* New upload slot */
+    .upload-slot {
+      background: #f7f9fc;
+      border: 1.5px dashed #c3deff;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .upload-slot input[type="text"],
+    .upload-slot input[type="file"] {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1.5px solid #d0dce8;
+      border-radius: 6px;
+      font-size: 13px;
+      background: white;
+      outline: none;
+    }
+    .upload-slot .slot-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .upload-slot .upload-status {
+      font-size: 12px;
+      color: #888;
+    }
+    .upload-slot .upload-status.uploading { color: #007bff; }
+    .upload-slot .upload-status.done { color: #00b894; font-weight: 700; }
+    .upload-slot .upload-status.error { color: #e53935; }
+
+    .add-media-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: #e8f4ff;
+      color: #007bff;
+      border: 1.5px solid #c3deff;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .add-media-btn:hover { background: #d0e8ff; }
+
+    /* Spinner overlay */
+    #spinnerOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.75);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 4px solid #e8f4ff;
+      border-top-color: #007bff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Inline save spinner */
+    .inline-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+    .toast.success { background: #00b894; }
+    .toast.error { background: #e53935; }
+
+    /* Upload progress */
+    .progress-wrap {
+      display: none;
+      height: 4px;
+      background: #e0eaff;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #007bff, #00b894);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    .section-note {
+      font-size: 12px;
+      color: #888;
+      margin-top: -10px;
+      margin-bottom: 14px;
+    }
+
+    .video-preview-wrap video {
+      max-width: 100%;
+      max-height: 160px;
+      border-radius: 6px;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="spinnerOverlay">
+  <div class="spinner"></div>
+  <div style="font-size:14px;color:#555;">Loading profile…</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<header class="page-header">
+  <a href="dashboard_page.html" title="Back to Dashboard">&#8592;</a>
+  <h1 id="pageTitle">My Profile</h1>
+</header>
+
+<div class="form-wrapper">
+
+  <!-- ═══════════════════════ SEEKER PROFILE ═══════════════════════ -->
+  <div id="seekerProfile" style="display:none;">
+
+    <!-- Photo -->
+    <div class="card">
+      <h2>Profile Photo</h2>
+      <div class="photo-wrap">
+        <div id="seekerPhotoPreview" class="photo-placeholder">👤</div>
+        <div>
+          <label class="upload-btn-label">
+            📷 Change Photo
+            <input type="file" id="seekerPhotoInput" accept="image/*" />
+          </label>
+          <div class="progress-wrap" id="photoProgressWrap">
+            <div class="progress-bar" id="photoProgressBar"></div>
+          </div>
+          <p style="font-size:12px;color:#888;margin-top:6px;">JPG, PNG or WebP · Max 10 MB</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video Introductions -->
+    <div class="card">
+      <h2>Video Introductions</h2>
+      <p class="section-note">Upload short videos introducing yourself to employers.</p>
+      <div class="media-list" id="videosList"></div>
+      <button class="add-media-btn" id="addVideoBtn" type="button">＋ Add Video</button>
+    </div>
+
+    <!-- Document Vault -->
+    <div class="card">
+      <h2>CV &amp; Documents</h2>
+      <p class="section-note">Upload your CV, degrees, certificates and other documents.</p>
+      <div class="media-list" id="docsList"></div>
+      <button class="add-media-btn" id="addDocBtn" type="button">＋ Add Document</button>
+    </div>
+
+    <!-- Personal Info -->
+    <div class="card">
+      <h2>Personal Information</h2>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="s_fullName" placeholder="Your full name" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Main Area / Industry</label>
+          <select id="s_majorCategory">
+            <option value="">Select Industry</option>
+            <option>Engineering &amp; Tech</option>
+            <option>Business &amp; Admin</option>
+            <option>Health &amp; Sciences</option>
+            <option>Arts &amp; Design</option>
+            <option>Humanities/Social</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Sub Area</label>
+          <select id="s_subMajor">
+            <option value="">Select Sub Area</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Education / Professional Qualification</label>
+        <select id="s_education">
+          <option value="">Select Qualification</option>
+          <option value="High School">High School</option>
+          <option value="Certificate">Certificate</option>
+          <option value="Diploma">Diploma</option>
+          <option value="Bachelor's Degree">Bachelor's Degree</option>
+          <option value="Master's Degree">Master's Degree</option>
+          <option value="PhD / Doctorate">PhD / Doctorate</option>
+          <option value="Professional Certification">Professional Certification</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label style="font-weight:700;color:#007bff;">Years of Experience</label>
+        <select id="s_experience" style="border-color:#007bff;">
+          <option value="">Select experience level</option>
+          <option value="Entry Level (0–1 years)">Entry Level (0–1 years)</option>
+          <option value="Junior (1–3 years)">Junior (1–3 years)</option>
+          <option value="Mid-Level (3–5 years)">Mid-Level (3–5 years)</option>
+          <option value="Senior (5–8 years)">Senior (5–8 years)</option>
+          <option value="Expert (8+ years)">Expert (8+ years)</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Location (Country)</label>
+          <input type="text" id="s_location" placeholder="e.g. Nigeria" />
+        </div>
+        <div class="form-group">
+          <label>Address</label>
+          <input type="text" id="s_address" placeholder="e.g. Lagos, Island" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Skills</label>
+        <input type="text" id="s_skills" placeholder="e.g. Python, Project Management, Design" />
+      </div>
+      <div class="form-group">
+        <label>Bio / About Me</label>
+        <textarea id="s_bio" placeholder="Write a short bio about yourself…"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Projects</label>
+        <textarea id="s_projects" placeholder="Describe notable projects you have worked on…"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Referees</label>
+        <textarea id="s_referees" placeholder="List your referees (name, title, contact)…"></textarea>
+      </div>
+      <button class="save-btn" id="savePersonalBtn" type="button">Save Personal Info</button>
+    </div>
+
+    <!-- Job Preferences -->
+    <div class="card">
+      <h2>Job Preferences</h2>
+      <p class="section-note">These are used to match you with companies.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Target Industry</label>
+          <select id="p_industry">
+            <option value="">Any Industry</option>
+            <option>Engineering &amp; Tech</option>
+            <option>Business &amp; Admin</option>
+            <option>Health &amp; Sciences</option>
+            <option>Arts &amp; Design</option>
+            <option>Humanities/Social</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Target Sub Industry</label>
+          <select id="p_subIndustry">
+            <option value="">Any Sub Area</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Expected Salary (min, USD/yr)</label>
+          <input type="number" id="p_salary" placeholder="e.g. 50000" />
+        </div>
+        <div class="form-group">
+          <label>Preferred Location</label>
+          <input type="text" id="p_location" placeholder="e.g. Remote, Nigeria" />
+        </div>
+      </div>
+      <button class="save-btn" id="savePrefBtn" type="button">Save Preferences</button>
+    </div>
+
+  </div><!-- /seekerProfile -->
+
+  <!-- ═══════════════════════ EMPLOYER PROFILE ═══════════════════════ -->
+  <div id="employerProfile" style="display:none;">
+
+    <!-- Logo & Video -->
+    <div class="card">
+      <h2>Company Logo &amp; Video</h2>
+      <div style="margin-bottom:20px;">
+        <label style="font-size:13px;font-weight:600;color:#555;display:block;margin-bottom:8px;">Company Logo</label>
+        <div class="photo-wrap">
+          <div id="employerLogoPreview" class="photo-placeholder" style="border-radius:10px;">🏢</div>
+          <div>
+            <label class="upload-btn-label">
+              📷 Change Logo
+              <input type="file" id="employerLogoInput" accept="image/*" />
+            </label>
+            <div class="progress-wrap" id="logoProgressWrap">
+              <div class="progress-bar" id="logoProgressBar"></div>
+            </div>
+            <p style="font-size:12px;color:#888;margin-top:6px;">JPG, PNG or WebP · Max 10 MB</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <label style="font-size:13px;font-weight:600;color:#555;display:block;margin-bottom:8px;">Company Video</label>
+        <div id="employerVideoPreviewWrap" style="margin-bottom:10px;"></div>
+        <label class="upload-btn-label">
+          🎥 Change Video
+          <input type="file" id="employerVideoInput" accept="video/*" />
+        </label>
+        <div class="progress-wrap" id="videoProgressWrap">
+          <div class="progress-bar" id="videoProgressBar"></div>
+        </div>
+        <p style="font-size:12px;color:#888;margin-top:6px;">MP4, MOV · Max 50 MB</p>
+      </div>
+    </div>
+
+    <!-- Company Info -->
+    <div class="card">
+      <h2>Company Information</h2>
+      <div class="form-group">
+        <label>Company Name</label>
+        <input type="text" id="e_companyName" placeholder="Your company name" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Main Area / Industry</label>
+          <select id="e_majorCategory">
+            <option value="">Select Industry</option>
+            <option>Engineering &amp; Tech</option>
+            <option>Business &amp; Admin</option>
+            <option>Health &amp; Sciences</option>
+            <option>Arts &amp; Design</option>
+            <option>Humanities/Social</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Sub Area</label>
+          <select id="e_subMajor">
+            <option value="">Select Sub Area</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Location (Country)</label>
+        <input type="text" id="e_location" placeholder="e.g. Nigeria" />
+      </div>
+      <div class="form-group">
+        <label>Company Bio / About</label>
+        <textarea id="e_bio" rows="5" placeholder="Tell job seekers about your company…"></textarea>
+      </div>
+      <button class="save-btn" id="saveEmployerBtn" type="button">Save Company Info</button>
+    </div>
+
+    <!-- Preferences link -->
+    <div class="card" style="text-align:center;padding:20px 24px;">
+      <p style="color:#555;font-size:14px;margin-bottom:14px;">Manage the candidate matching preferences for your company.</p>
+      <a href="adjust-preferences.html" style="display:inline-block;padding:11px 28px;background:linear-gradient(135deg,#007bff,#00b894);color:white;border-radius:6px;font-weight:700;text-decoration:none;font-size:14px;">⚙️ Adjust Preferences</a>
+    </div>
+
+  </div><!-- /employerProfile -->
+
+</div><!-- /form-wrapper -->
+
+<script src="config.js"></script>
+<script src="my-profile.js"></script>
+</body>
+</html>

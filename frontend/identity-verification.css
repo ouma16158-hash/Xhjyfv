@@ -1,0 +1,122 @@
+
+body {
+  background-color: #ffffff;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.ty-verify-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+.ty-title {
+  color: #0074cc;
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+.ty-note {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #1f9c4b;
+  margin-bottom: 1rem;
+}
+
+.ty-section {
+  margin-bottom: 2rem;
+}
+
+.ty-file-upload label {
+  display: block;
+  font-weight: 600;
+  margin-top: 10px;
+  color: #1f9c4b;
+}
+
+.ty-file-upload input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+#preview {
+  width: 100%;
+  max-height: 300px;
+  border: 2px solid #0074cc;
+  border-radius: 5px;
+  margin: 1rem 0;
+  object-fit: cover;
+}
+
+.ty-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.ty-buttons button,
+.ty-submit {
+  background-color: #1f9c4b;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  min-width: 100px;
+}
+
+.ty-buttons button:disabled,
+.ty-submit:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.ty-progress-container {
+  background-color: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 20px;
+  margin-top: 10px;
+}
+
+.ty-progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: #0074cc;
+  transition: width 1s linear;
+}
+
+.ty-status-text {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 500;
+  color: #0074cc;
+}
+
+/* ✅ Responsive Text Sizes and Spacing */
+@media (max-width: 480px) {
+  .ty-title {
+    font-size: 1.5rem;
+  }
+
+  .ty-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ty-buttons button,
+  .ty-submit {
+    width: 100%;
+  }
+
+  .ty-note {
+    font-size: 0.8rem;
+  }
+}
